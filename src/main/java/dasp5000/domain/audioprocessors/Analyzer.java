@@ -4,14 +4,14 @@ package dasp5000.domain.audioprocessors;
 public class Analyzer implements AudioProcessor {
     private long bytesRead;
     private int peakValue;
-    private int minVal;
-    private long sqrSum;
+    private int minValue;
+    private long squareSum;
     
     public Analyzer() {
         this.bytesRead = 0;
         this.peakValue = 0;
-        this.minVal = 32768;
-        this.sqrSum = 0;
+        this.minValue = 32768;
+        this.squareSum = 0;
     }
     
     @Override
@@ -21,10 +21,10 @@ public class Analyzer implements AudioProcessor {
             if (val > this.peakValue) {
                 this.peakValue = bytes[i];
             }
-            if (val < this.minVal) {
-                this.minVal = bytes[i];
+            if (val < this.minValue) {
+                this.minValue = bytes[i];
             }
-            this.sqrSum += Math.pow(val, 2);
+            this.squareSum += Math.pow(val, 2);
             this.bytesRead++;
         }
     }
@@ -33,8 +33,12 @@ public class Analyzer implements AudioProcessor {
         return peakValue;
     }
     
+    public int getMinValue() {
+        return minValue;
+    }
+    
     public int getRMS() {
-        return (int)(Math.sqrt(this.sqrSum / this.bytesRead));
+        return (int)(Math.sqrt(this.squareSum / this.bytesRead));
     }
     
 }
