@@ -10,7 +10,7 @@ public class DecibelConverter {
         return 20 * Math.log10(sampleValue / (maxValue / 2));
     }
     
-    public static double dBFSToSampleValue(double dBFS, int maxValue) {
-        return Math.pow(10, dBFS / 20) * (maxValue / 2);
+    public static int dBFSToSampleValue(double dBFS, int maxValue) {
+        return (int)(Math.pow(10, dBFS / 20) * (maxValue / 2));
     }
 }
