@@ -1,0 +1,14 @@
+# Viikkoraportti 1
+
+Käytetty noin 10 tuntia.
+
+Ensimmäisellä viikolla tutustuin aiheeseen ja etsin lähteitä, joiden avulla pääsen alkuun työssäni. Päätin myös mitä audiosignaalinkäsittelyalgoritmeja toteutan ensisijaisesti. Hahmottelin myös ohjelman rakennetta ja aloitin ohjelmointia. Perustin myös github-repositorion projektilleni ja rekisteröidyin labtooliin.
+
+Suurin työ tällä viikolla on ollut saada perusteista kiinni:
+- Miten käsitellä Javan omilla kirjastoilla äänitiedostoja?
+- Miten analysoida dataa? Miten tehdä muunnoksia näytteistä desibeleiksi (dBFS, decibels relative to full scale) sekä desibeleistä näytteiksi?
+- Miten miksata kahta tai useampaa ääniraitaa keskenään?
+- Mitkä ovat todennäköisesti saavutettavat aika- ja tilavaativuusluokat toteutettavilla algoritmeilla?
+Löysin valtaosaan kysymyksistä jo lähteitä, joiden avulla pääsen työssä hyvin alkuun. Lähteet on listattu määrittelydokumentissa.
+
+Seuraavaksi toteutan ohjelmaani äänitiedoston lukemisen sekä tallentamisen ja aloitan signaalinmuokkaus- ja analysointialgoritmien toteuttamisen.
