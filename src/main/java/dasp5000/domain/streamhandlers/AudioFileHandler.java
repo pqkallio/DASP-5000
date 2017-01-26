@@ -34,11 +34,11 @@ public class AudioFileHandler {
      * @throws IOException 
      */
     public AudioInputStream getAudioInputStream() throws UnsupportedAudioFileException, IOException {
-        AudioInputStream audioInputStream;
+        AudioInputStream audioInputStream = null;
         try {
             audioInputStream = AudioSystem.getAudioInputStream(inputFile);
         } catch (IOException | UnsupportedAudioFileException ex) {
-            return null;
+            System.out.println(ex.toString());
         }
         return audioInputStream;
     }

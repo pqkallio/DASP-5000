@@ -45,7 +45,7 @@ public class AnalyzerTest {
         System.out.println("Process");
         byte[] bytes = null;
         Analyzer instance = new Analyzer();
-        instance.Process(bytes);
+        instance.process(bytes);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

@@ -2,30 +2,39 @@
 package dasp5000.domain.audioprocessors;
 
 public class Analyzer implements AudioProcessor {
-    private long bytesRead;
+    private long wordsRead;
     private int peakValue;
     private int minValue;
     private long squareSum;
+    private int samples;
     
     public Analyzer() {
-        this.bytesRead = 0;
+        this.wordsRead = 0;
         this.peakValue = 0;
         this.minValue = 32768;
         this.squareSum = 0;
+        this.samples = 0;
     }
     
     @Override
-    public void Process(byte[] bytes) {
+    public void process(byte[] bytes) {
+        byte firstVal = 0;
         for (int i = 0; i < bytes.length; i++) {
-            int val = Math.abs(bytes[i]);
-            if (val > this.peakValue) {
-                this.peakValue = bytes[i];
+            if ((i + 1) % 2 == 0) {
+                short word = twoBytesToShort(firstVal, bytes[i]);
+                samples++;
+                int val = Math.abs(word);
+                if (val > this.peakValue) {
+                    this.peakValue = val;
+                }
+                if (val < this.minValue) {
+                    this.minValue = val;
+                }
+                this.squareSum += Math.pow(val, 2);
+                this.wordsRead++;
+            } else {
+                firstVal = bytes[i];
             }
-            if (val < this.minValue) {
-                this.minValue = bytes[i];
-            }
-            this.squareSum += Math.pow(val, 2);
-            this.bytesRead++;
         }
     }
 
@@ -38,7 +47,14 @@ public class Analyzer implements AudioProcessor {
     }
     
     public int getRMS() {
-        return (int)(Math.sqrt(this.squareSum / this.bytesRead));
+        return (int)(Math.sqrt(this.squareSum / this.wordsRead));
     }
-    
+
+    public int getSamples() {
+        return samples;
+    }
+
+    private short twoBytesToShort(byte firstVal, byte secondVal) {
+        return (short)((secondVal << 8) | (firstVal & 0xff));
+    }
 }
