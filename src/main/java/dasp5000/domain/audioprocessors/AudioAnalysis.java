@@ -1,5 +1,5 @@
 
-package dasp5000.domain;
+package dasp5000.domain.audioprocessors;
 
 public class AudioAnalysis {
     private final int peakSampleValue;

@@ -1,12 +1,12 @@
 
 package dasp5000.domain;
 
-import java.util.ArrayList;
+import dasp5000.domain.audioprocessors.AudioAnalysis;
 import javax.sound.sampled.AudioFormat;
 
 public class AudioContainer {
     private AudioAnalysis audioAnalysis;
-    private ArrayList<Integer> words;
+    private DynamicArray<Integer> words;
     private final AudioFormat audioFormat;
 
     public AudioContainer(AudioFormat audioFormat) {
@@ -17,7 +17,7 @@ public class AudioContainer {
         this.audioAnalysis = audioAnalysis;
     }
 
-    public void setWords(ArrayList<Integer> words) {
+    public void setWords(DynamicArray<Integer> words) {
         this.words = words;
     }
     
@@ -37,7 +37,7 @@ public class AudioContainer {
         return this.audioFormat.isBigEndian();
     }
 
-    public ArrayList<Integer> getWords() {
+    public DynamicArray<Integer> getWords() {
         return words;
     }
 

@@ -6,10 +6,7 @@
 package dasp5000;
 
 import dasp5000.controllers.AudioController;
-import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
@@ -23,10 +20,11 @@ public class DASP5000 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        File filee = new File("/home/pqkallio/wavtest/mono.wav");
+        String filePathMac = "/Users/petrikallio/wavtest/mono.wav";
+        String filePathUbuntu = "/home/pqkallio/wavtest/mono.wav";
         AudioController controller;
         try {
-            controller = new AudioController("/home/pqkallio/wavtest/mono.wav");
+            controller = new AudioController(filePathMac);
         } catch (UnsupportedAudioFileException | IOException ex) {
             System.out.println(ex.toString());
             return;

@@ -1,7 +1,7 @@
 
 package dasp5000.controllers;
 
-import dasp5000.domain.AudioAnalysis;
+import dasp5000.domain.audioprocessors.AudioAnalysis;
 import dasp5000.domain.AudioContainer;
 import dasp5000.domain.audioprocessors.Analyzer;
 import dasp5000.domain.streamhandlers.AudioFileHandler;
@@ -22,6 +22,7 @@ public class AudioController {
         
         this.audioContainer = new AudioContainer(audioInputStream.getFormat());
         processAudioBytes(this.audioContainer, audioInputStream);
+        System.out.println(audioContainer.getWords());
         AudioAnalysis analysis = Analyzer.analyse(this.audioContainer.getWords());
         this.audioContainer.setAudioAnalysis(analysis);
     }
@@ -64,6 +65,7 @@ public class AudioController {
         AudioAnalysis analysis = this.audioContainer.getAudioAnalysis();
         System.out.println("Minimum sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getMinimumSampleValue(), (int)Math.pow(2, this.audioContainer.getBitDepth())));
         System.out.println("Peak sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getPeakSampleValue(), (int)Math.pow(2, this.audioContainer.getBitDepth())));
-        System.out.println("Audio clip length: " + 1.0 * analysis.getSamples() / this.audioContainer.getSampleRate() + " seconds");
+        double time = 1.0 * analysis.getSamples() / this.audioContainer.getSampleRate();
+        System.out.println("Audio clip length: " + (int)Math.floor(time / 60) + " minutes " + time % 60 + " seconds");
     }
 }

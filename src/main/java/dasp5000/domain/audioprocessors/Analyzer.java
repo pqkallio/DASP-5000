@@ -1,12 +1,11 @@
 
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.AudioAnalysis;
-import java.util.ArrayList;
+import dasp5000.domain.DynamicArray;
 
 public class Analyzer {
     
-    public static AudioAnalysis analyse(ArrayList<Integer> words) {
+    public static AudioAnalysis analyse(DynamicArray<Integer> words) {
         int peakValue = Integer.MIN_VALUE;
         int minimumValue = Integer.MAX_VALUE;
         int samples = 0;

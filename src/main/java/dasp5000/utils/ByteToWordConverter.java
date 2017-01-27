@@ -1,15 +1,15 @@
 package dasp5000.utils;
 
-import java.util.ArrayList;
+import dasp5000.domain.DynamicArray;
 
 public class ByteToWordConverter {
-    private final ArrayList<Integer> words;
+    private DynamicArray<Integer> words;
     private final int bytesPerWord;
     private final boolean bigEndian;
 
     public ByteToWordConverter(int bitsPerWord, boolean bigEndian) {
         this.bytesPerWord = bitsPerWord / 8;
-        this.words = new ArrayList<>();
+        this.words = new DynamicArray<>(Integer.class);
         this.bigEndian = bigEndian;
     }
     
@@ -44,8 +44,14 @@ public class ByteToWordConverter {
             this.words.add(byteToWordConversion(toBeConverted));
         }
     }
+    
+    public byte[] convertWordsToBytes()
 
-    public ArrayList<Integer> getWords() {
+    public DynamicArray<Integer> getWords() {
         return words;
+    }
+    
+    public void setWords(DynamicArray<Integer> words) {
+        this.words = words;
     }
 }
