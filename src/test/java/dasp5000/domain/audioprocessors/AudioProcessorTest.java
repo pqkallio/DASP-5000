@@ -45,14 +45,14 @@ public class AudioProcessorTest {
         System.out.println("Process");
         byte[] byteArray = null;
         AudioProcessor instance = new AudioProcessorImpl();
-        instance.process(byteArray);
+        instance.process(byteArray, 0);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     public class AudioProcessorImpl implements AudioProcessor {
 
-        public void process(byte[] byteArray) {
+        public void process(byte[] byteArray, int n) {
         }
     }
     

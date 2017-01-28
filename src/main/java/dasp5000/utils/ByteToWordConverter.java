@@ -45,7 +45,9 @@ public class ByteToWordConverter {
         }
     }
     
-    public byte[] convertWordsToBytes()
+    public byte[] convertWordsToBytes() {
+        return new byte[0];
+    }
 
     public DynamicArray<Integer> getWords() {
         return words;

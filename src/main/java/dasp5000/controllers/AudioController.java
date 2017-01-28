@@ -11,10 +11,20 @@ import java.io.IOException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/**
+ * A class to handle a single audio clip's life cycle.
+ * @author Petri Kallio
+ */
 public class AudioController {
     private final String fileName;
     private final AudioContainer audioContainer;
 
+    /**
+     * Constructs a new AudioController object.
+     * @param fileName The name of the audio file to be opened
+     * @throws UnsupportedAudioFileException
+     * @throws IOException 
+     */
     public AudioController(String fileName) 
             throws UnsupportedAudioFileException, IOException {
         this.fileName = fileName;
@@ -61,6 +71,10 @@ public class AudioController {
         audioContainer.setWords(converter.getWords());
     }
     
+    /**
+     * This method is purely for debugging purposes. It prints the minimum 
+     * and peak sample values as well as the length of the audio clip.
+     */
     public void printAudioAnalysis() {
         AudioAnalysis analysis = this.audioContainer.getAudioAnalysis();
         System.out.println("Minimum sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getMinimumSampleValue(), (int)Math.pow(2, this.audioContainer.getBitDepth())));
