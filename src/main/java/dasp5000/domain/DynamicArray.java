@@ -4,14 +4,20 @@ package dasp5000.domain;
 import java.lang.reflect.Array;
 
 /**
- *
- * @author petrikallio
+ * A dynamic and generic array to store data into. 
+ * 
+ * @author Petri Kallio
  */
 public class DynamicArray<T> {
     private T[] array;
     private int size;
     private final Class<T> objectClass;
     
+    /**
+     * A constructor that creates a class-specific DynamicArray.
+     * 
+     * @param objectClass the class of the objects to store in the DynamicArray
+     */
     public DynamicArray(Class<T> objectClass) {
         this.size = 0;
         this.objectClass = objectClass;
@@ -19,6 +25,11 @@ public class DynamicArray<T> {
         System.out.println(this.array.length);
     }
     
+    /**
+     * Adds the object given as parameter to the DynamicArray
+     * 
+     * @param object 
+     */
     public void add(T object) {
         array[size] = object;
         size++;
@@ -30,10 +41,21 @@ public class DynamicArray<T> {
         }
     }
     
+    /**
+     * Gets the object at the given index of the DynamicArray
+     * 
+     * @param index
+     * @return 
+     */
     public T get(int index) {
         return array[index];
     }
     
+    /**
+     * Returns the current amount of objects in the DynamicArray
+     * 
+     * @return 
+     */
     public int size() {
         return size;
     }
