@@ -1,7 +1,7 @@
 
 package dasp5000.controllers;
 
-import dasp5000.domain.audioprocessors.AudioAnalysis;
+import dasp5000.domain.AudioAnalysis;
 import dasp5000.domain.AudioContainer;
 import dasp5000.domain.audioprocessors.Analyzer;
 import dasp5000.domain.streamhandlers.AudioFileHandler;

@@ -22,7 +22,6 @@ public class DynamicArray<T> {
         this.size = 0;
         this.objectClass = objectClass;
         this.array = (T[])Array.newInstance(objectClass, 64);
-        System.out.println(this.array.length);
     }
     
     /**

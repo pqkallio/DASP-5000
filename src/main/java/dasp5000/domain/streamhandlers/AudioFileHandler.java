@@ -2,11 +2,17 @@
 package dasp5000.domain.streamhandlers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/**
+ * This class is used in opening a audio file.
+ * 
+ * @author pqkallio
+ */
 public class AudioFileHandler {
     private String fileName;
     private File inputFile;
@@ -18,12 +24,15 @@ public class AudioFileHandler {
      * @param fileName The file to be opened.
      * @throws IllegalArgumentException 
      */
-    public AudioFileHandler(String fileName) throws IllegalArgumentException {
+    public AudioFileHandler(String fileName) throws IllegalArgumentException, FileNotFoundException {
         if (fileName == null || fileName.isEmpty()) {
             throw new IllegalArgumentException("File name not given.");
         }
         this.fileName = fileName;
         this.inputFile = new File(this.fileName);
+        if (!this.inputFile.exists()) {
+            throw new FileNotFoundException();
+        }
     }
     
     /**

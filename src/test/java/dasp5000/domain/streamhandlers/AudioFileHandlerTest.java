@@ -5,6 +5,10 @@
  */
 package dasp5000.domain.streamhandlers;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -37,10 +41,28 @@ public class AudioFileHandlerTest {
     public void tearDown() {
     }
 
-    @Test
-    public void testSomeMethod() {
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    @Test(expected = IllegalArgumentException.class)
+    public void illegalArgumentExceptionIfFileNameIsNull() throws FileNotFoundException {
+        new AudioFileHandler(null);
     }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void illegalArgumentExceptionIfFileNameIsEmpty() throws FileNotFoundException {
+        new AudioFileHandler("");
+    }
+    
+    @Test(expected = FileNotFoundException.class)
+    public void fileNotFoundExceptionIfFileNotValid() throws UnsupportedAudioFileException, IOException {
+        new AudioFileHandler("test");
+    }
+
+    @Test
+    public void testGetAudioInputStream() throws Exception {
+        System.out.println("getAudioInputStream");
+        AudioFileHandler instance = null;
+        AudioInputStream expResult = null;
+        AudioInputStream result = instance.getAudioInputStream();
+        assertEquals(expResult, result);
+        fail("The test case is a prototype.");
+    }
 }

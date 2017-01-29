@@ -1,7 +1,6 @@
 
 package dasp5000.domain;
 
-import dasp5000.domain.audioprocessors.AudioAnalysis;
 import javax.sound.sampled.AudioFormat;
 
 /**

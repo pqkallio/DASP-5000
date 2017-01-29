@@ -1,6 +1,7 @@
 
 package dasp5000.domain.audioprocessors;
 
+import dasp5000.domain.AudioAnalysis;
 import dasp5000.domain.DynamicArray;
 
 /**
