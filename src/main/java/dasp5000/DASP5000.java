@@ -3,6 +3,7 @@ package dasp5000;
 
 import dasp5000.controllers.AudioController;
 import dasp5000.domain.audioprocessors.Normalizer;
+import dasp5000.domain.audioprocessors.Reverser;
 import java.io.IOException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -31,8 +32,10 @@ public class DASP5000 {
         }
         
         controller.printAudioAnalysis();
-        Normalizer normalizer = new Normalizer(controller.getAudioContainer(), -12.0);
+        Normalizer normalizer = new Normalizer(controller.getAudioContainer(), -1.0);
         normalizer.process();
+        Reverser reverser = new Reverser(controller.getAudioContainer());
+        reverser.process();
         controller.printAudioAnalysis();
         if (args.length > 1) {
             controller.writeToFile(args[1]);

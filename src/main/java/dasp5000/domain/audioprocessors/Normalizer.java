@@ -13,7 +13,7 @@ import dasp5000.utils.DecibelConverter;
  * @author Petri Kallio
  */
 public class Normalizer implements AudioProcessor {
-    private AudioContainer audioContainer;
+    private final AudioContainer audioContainer;
     private double dBFSMaxLevel;
     
     /**
@@ -51,5 +51,9 @@ public class Normalizer implements AudioProcessor {
     private AudioAnalysis calculateNewAnalysis(DynamicArray<Integer> data) {
         AudioAnalysis analysis = Analyzer.analyse(data);
         return analysis;
+    }
+
+    public void setdBFSMaxLevel(double dBFSMaxLevel) {
+        this.dBFSMaxLevel = dBFSMaxLevel;
     }
 }
