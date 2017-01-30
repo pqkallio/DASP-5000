@@ -68,11 +68,21 @@ public class ByteToWordConverter {
     /**
      * Converts the given words into bytes and returns them as an array.
      * 
-     * @return 
+     * @return a byte array
      */
     public byte[] convertWordsToBytes() {
-        // TODO: param DynamicArray<Integer>, return ByteStream (tjsp)
-        return new byte[0];
+        byte[] bytes = new byte[words.size() * bytesPerWord];
+        int byteIndex = 0;
+        for (int i = 0; i < words.size(); i++) {
+            byte[] wordInBytes = wordToBytes(words.get(i));
+            int wordInBytesIndex = 0;
+            while (wordInBytesIndex < bytesPerWord) {
+                bytes[byteIndex] = wordInBytes[wordInBytesIndex];
+                wordInBytesIndex++;
+                byteIndex++;
+            }
+        }
+        return bytes;
     }
 
     /**
@@ -91,5 +101,20 @@ public class ByteToWordConverter {
      */
     public void setWords(DynamicArray<Integer> words) {
         this.words = words;
+    }
+
+    private byte[] wordToBytes(Integer word) {
+        byte[] wordInBytes = new byte[bytesPerWord];
+        int max = 0xFFFFFFFF;
+        if (bigEndian) {
+            for (int i = 0; i < bytesPerWord; i++) {
+                wordInBytes[i] = (byte)((word >> (8 * i)) & max);
+            }
+        } else {
+            for (int i = bytesPerWord - 1; i > -1; i--) {
+                wordInBytes[i] = (byte)((word >> (8 * i)) & max);
+            }
+        }
+        return wordInBytes;
     }
 }

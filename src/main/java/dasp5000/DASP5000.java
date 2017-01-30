@@ -16,7 +16,7 @@ public class DASP5000 {
      * audio file you want to open as the first argument. 
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
         AudioController controller;
         if (args.length > 0) {
             try {
@@ -30,6 +30,10 @@ public class DASP5000 {
         }
         
         controller.printAudioAnalysis();
+        
+        if (args.length > 1) {
+            controller.writeToFile(args[1]);
+        }
     }
     
 }

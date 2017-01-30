@@ -7,8 +7,13 @@ import dasp5000.domain.audioprocessors.Analyzer;
 import dasp5000.domain.streamhandlers.AudioFileHandler;
 import dasp5000.utils.ByteToWordConverter;
 import dasp5000.utils.DecibelConverter;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
@@ -70,6 +75,26 @@ public class AudioController {
         }
         audioContainer.setWords(converter.getWords());
     }
+    
+    public void writeToFile(String outputFilePath) 
+            throws UnsupportedAudioFileException, IOException {
+        ByteToWordConverter converter 
+                = new ByteToWordConverter(audioContainer.getBitDepth(), 
+                                          audioContainer.isBigEndian());
+        converter.setWords(audioContainer.getWords());
+        byte[] wordsAsBytes = converter.convertWordsToBytes();
+        ByteArrayInputStream byteArrayInputStream 
+                = new ByteArrayInputStream(wordsAsBytes);
+        AudioFormat audioFormat = new AudioFormat(audioContainer.getSampleRate(),
+                audioContainer.getBitDepth(),
+                audioContainer.getNumberOfChannels(), true,
+                audioContainer.isBigEndian());
+        AudioInputStream audioInputStream 
+                = new AudioInputStream(byteArrayInputStream, audioFormat, 
+                        wordsAsBytes.length);
+        File outputFile = new File(outputFilePath);
+        AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputFile);
+    } 
     
     /**
      * This method is purely for debugging purposes. It prints the minimum 
