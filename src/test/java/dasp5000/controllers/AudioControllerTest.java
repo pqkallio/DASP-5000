@@ -26,13 +26,5 @@ public class AudioControllerTest {
     @After
     public void tearDown() {
     }
-
-    @Test
-    public void testPrintAudioAnalysis() {
-        System.out.println("printAudioAnalysis");
-        AudioController instance = null;
-        instance.printAudioAnalysis();
-        fail("The test case is a prototype.");
-    }
     
 }

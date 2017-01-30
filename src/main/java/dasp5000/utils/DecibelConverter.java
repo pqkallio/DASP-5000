@@ -14,7 +14,7 @@ public class DecibelConverter {
      * 
      * @param sampleValue The value to convert
      * @param maxValue The maximum value to compare to
-     * @return 
+     * @return The sample value converted to dBFS
      */
     public static double sampleValueToDecibels(int sampleValue, int maxValue) {
         if (Math.abs(sampleValue) < 2) {

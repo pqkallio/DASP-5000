@@ -111,13 +111,4 @@ public class AnalyzerTest {
         assertEquals(analysis.getSamples(), 1);
     }
 
-    @Test
-    public void testAnalyse() {
-        System.out.println("analyse");
-        DynamicArray<Integer> words = null;
-        AudioAnalysis expResult = null;
-        AudioAnalysis result = Analyzer.analyse(words);
-        assertEquals(expResult, result);
-        fail("The test case is a prototype.");
-    }
 }

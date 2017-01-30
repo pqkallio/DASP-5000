@@ -55,14 +55,4 @@ public class AudioFileHandlerTest {
     public void fileNotFoundExceptionIfFileNotValid() throws UnsupportedAudioFileException, IOException {
         new AudioFileHandler("test");
     }
-
-    @Test
-    public void testGetAudioInputStream() throws Exception {
-        System.out.println("getAudioInputStream");
-        AudioFileHandler instance = null;
-        AudioInputStream expResult = null;
-        AudioInputStream result = instance.getAudioInputStream();
-        assertEquals(expResult, result);
-        fail("The test case is a prototype.");
-    }
 }

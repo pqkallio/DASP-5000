@@ -15,46 +15,48 @@ import static org.junit.Assert.*;
  * @author pqkallio
  */
 public class DynamicArrayTest {
+    private DynamicArray<Integer> dynamicArray;
     
     public DynamicArrayTest() {
     }
     
     @Before
     public void setUp() {
+        this.dynamicArray = new DynamicArray<>(Integer.class);
     }
     
     @After
     public void tearDown() {
     }
-
+    
     @Test
-    public void testAdd() {
-        System.out.println("add");
-        Object object = null;
-        DynamicArray instance = null;
-        instance.add(object);
-        fail("The test case is a prototype.");
-    }
-
-    @Test
-    public void testGet() {
-        System.out.println("get");
-        int index = 0;
-        DynamicArray instance = null;
-        Object expResult = null;
-        Object result = instance.get(index);
-        assertEquals(expResult, result);
-        fail("The test case is a prototype.");
-    }
-
-    @Test
-    public void testSize() {
-        System.out.println("size");
-        DynamicArray instance = null;
-        int expResult = 0;
-        int result = instance.size();
-        assertEquals(expResult, result);
-        fail("The test case is a prototype.");
+    public void atFirstTheArrayIsEmpty() {
+        assertEquals(dynamicArray.size(), 0);
     }
     
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void indexOutOfBoundsExceptionIfIndexIsLessThanZero() {
+        dynamicArray.get(-1);
+    }
+    
+    @Test
+    public void afterAddingAnElementTheSizeIsUpdated() {
+        assertEquals(dynamicArray.size(), 0);
+        dynamicArray.add(1);
+        assertEquals(dynamicArray.size(), 1);
+    }
+    
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void indexOutOfBoundsExceptionIfIndexEqualsSize() {
+        dynamicArray.add(1);
+        assertEquals(dynamicArray.size(), 1);
+        dynamicArray.get(dynamicArray.size());
+    }
+    
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void indexOutOfBoundsExceptionIfIndexGreaterThanSize() {
+        dynamicArray.add(1);
+        assertEquals(dynamicArray.size(), 1);
+        dynamicArray.get(dynamicArray.size() + 1);
+    }
 }

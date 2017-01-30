@@ -47,6 +47,9 @@ public class DynamicArray<T> {
      * @return 
      */
     public T get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
         return array[index];
     }
     

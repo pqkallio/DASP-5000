@@ -36,35 +36,24 @@ public class DecibelConverterTest {
     @After
     public void tearDown() {
     }
-
-    /**
-     * Test of sampleValueToDecibels method, of class DecibelConverter.
-     */
+    
     @Test
-    public void testSampleValueToDecibels() {
-        System.out.println("sampleValueToDecibels");
-        int sampleValue = 0;
-        int maxValue = 0;
-        double expResult = 0.0;
-        double result = DecibelConverter.sampleValueToDecibels(sampleValue, maxValue);
-        assertEquals(expResult, result, 0.0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of dBFSToSampleValue method, of class DecibelConverter.
-     */
-    @Test
-    public void testDBFSToSampleValue() {
-        System.out.println("dBFSToSampleValue");
-        double dBFS = 0.0;
-        int maxValue = 0;
-        double expResult = 0.0;
-        double result = DecibelConverter.dBFSToSampleValue(dBFS, maxValue);
-        assertEquals(expResult, result, 0.0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void ifSampleValueIsHalfTheMaxValueTheResultIs0dBFS() {
+        assertEquals(DecibelConverter.sampleValueToDecibels(63556 / 2, 63556), 0, 0);
     }
     
+    @Test
+    public void ifSampleValueIsAQuarterOfTheMAxValueTheResultIsApproxMinus6dBFS() {
+        assertEquals(DecibelConverter.sampleValueToDecibels(63556 / 4, 63556), -6, 0.1);
+    }
+    
+    @Test
+    public void ifdBFSValueIsZeroTheSampleValueEqualsMaxValueDividedByTwo() {
+        assertEquals(DecibelConverter.dBFSToSampleValue(0, 63556), 63556 / 2);
+    }
+    
+    @Test
+    public void ifdBFSValueIsMinus6TheSampleValueApproximatesToMaxValueDividedByFour() {
+        assertEquals(DecibelConverter.dBFSToSampleValue(-6.0, 63556), 15926);
+    }
 }
