@@ -40,7 +40,8 @@ public class AudioProcessorTest {
 
     public class AudioProcessorImpl implements AudioProcessor {
 
-        public void process(byte[] byteArray, int n) {
+        @Override
+        public void process() {
         }
     }
     

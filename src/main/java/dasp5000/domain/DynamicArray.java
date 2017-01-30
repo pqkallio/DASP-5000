@@ -47,10 +47,13 @@ public class DynamicArray<T> {
      * @return 
      */
     public T get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
+        checkIndex(index);
         return array[index];
+    }
+    
+    public void replace(int index, T value) {
+        checkIndex(index);
+        array[index] = value;
     }
     
     /**
@@ -77,6 +80,12 @@ public class DynamicArray<T> {
     private void copyArray(T[] to, T[] from) {
         for (int i = 0; i < size; i++) {
             to[i] = from[i];
+        }
+    }
+
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
         }
     }
 }

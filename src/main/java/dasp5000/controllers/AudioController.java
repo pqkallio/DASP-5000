@@ -95,6 +95,10 @@ public class AudioController {
         File outputFile = new File(outputFilePath);
         AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputFile);
     } 
+
+    public AudioContainer getAudioContainer() {
+        return audioContainer;
+    }
     
     /**
      * This method is purely for debugging purposes. It prints the minimum 

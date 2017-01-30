@@ -1,6 +1,7 @@
 
 package dasp5000.domain.audioprocessors;
 
+
 /**
  * An interface that each audio processing class must implement.
  * 
@@ -9,10 +10,7 @@ package dasp5000.domain.audioprocessors;
 public interface AudioProcessor {
     
     /**
-     * Processes the data given as parameter.
-     * 
-     * @param byteArray
-     * @param n 
+     * Processes the audio data.
      */
-    public abstract void process(byte[] byteArray, int n);
+    public abstract void process();
 }
