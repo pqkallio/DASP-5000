@@ -2,6 +2,8 @@
 package dasp5000;
 
 import dasp5000.controllers.AudioController;
+import dasp5000.domain.AudioContainer;
+import dasp5000.domain.audioprocessors.Mixer;
 import dasp5000.domain.audioprocessors.Normalizer;
 import dasp5000.domain.audioprocessors.Reverser;
 import java.io.IOException;
@@ -19,10 +21,12 @@ public class DASP5000 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
-        AudioController controller;
+        AudioController controller1;
+        AudioController controller2;
         if (args.length > 0) {
             try {
-                controller = new AudioController(args[0]);
+                controller1 = new AudioController(args[0]);
+                controller2 = new AudioController(args[1]);
             } catch (UnsupportedAudioFileException | IOException ex) {
                 System.out.println(ex.toString());
                 return;
@@ -31,14 +35,16 @@ public class DASP5000 {
             return;
         }
         
-        controller.printAudioAnalysis();
-        Normalizer normalizer = new Normalizer(controller.getAudioContainer(), -1.0);
-        normalizer.process();
-        Reverser reverser = new Reverser(controller.getAudioContainer());
-        reverser.process();
-        controller.printAudioAnalysis();
-        if (args.length > 1) {
-            controller.writeToFile(args[1]);
+        controller1.printAudioAnalysis();
+        controller2.printAudioAnalysis();
+        Mixer mixer = new Mixer(controller1.getAudioContainer(), 
+                controller2.getAudioContainer());
+        mixer.process();
+        AudioContainer mix = mixer.getMix();
+        AudioController mixed = new AudioController(mix);
+        mixed.printAudioAnalysis();
+        if (args.length > 2) {
+            mixed.writeToFile(args[2]);
         }
     }
     

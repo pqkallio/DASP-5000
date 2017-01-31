@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath dasp5000.DASP5000 /home/pqkallio/wavtest/mono.wav /home/pqkallio/wavtest/outputtest.wav</exec.args>
+                <exec.args>-classpath %classpath dasp5000.DASP5000 /home/pqkallio/wavtest/mono.wav /home/pqkallio/wavtest/outputtest.wav /home/pqkallio/wavtest/mixtest.wav</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
@@ -38,7 +38,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath dasp5000.DASP5000 /home/pqkallio/wavtest/mono.wav /home/pqkallio/wavtest/outputtest.wav</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath dasp5000.DASP5000 /home/pqkallio/wavtest/mono.wav /home/pqkallio/wavtest/outputtest.wav /home/pqkallio/wavtest/mixtest.wav</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
             </properties>
@@ -53,7 +53,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath dasp5000.DASP5000 /home/pqkallio/wavtest/mono.wav /home/pqkallio/wavtest/outputtest.wav</exec.args>
+                <exec.args>-classpath %classpath dasp5000.DASP5000 /home/pqkallio/wavtest/mono.wav /home/pqkallio/wavtest/outputtest.wav /home/pqkallio/wavtest/mixtest.wav</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>

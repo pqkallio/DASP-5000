@@ -82,7 +82,7 @@ public class Mixer implements AudioProcessor {
     }
     
     private double sampleToDouble(int sample, int max) {
-        return sample / max;
+        return 1.0 * sample / max;
     }
 
     private int doubleToSample(double mix, int maxSample) {

@@ -37,9 +37,17 @@ public class AudioController {
         
         this.audioContainer = new AudioContainer(audioInputStream.getFormat());
         processAudioBytes(this.audioContainer, audioInputStream);
-        System.out.println(audioContainer.getWords());
         AudioAnalysis analysis = Analyzer.analyse(this.audioContainer.getWords());
         this.audioContainer.setAudioAnalysis(analysis);
+    }
+    
+    public AudioController(AudioContainer audioContainer) {
+        this.audioContainer = audioContainer;
+        this.fileName = null;
+        if (this.audioContainer.getAudioAnalysis() == null) {
+            AudioAnalysis analysis = Analyzer.analyse(this.audioContainer.getWords());
+            this.audioContainer.setAudioAnalysis(analysis);
+        }
     }
     
     private AudioInputStream openAudioInputStream(String fileName) 
