@@ -3,6 +3,7 @@ package dasp5000.domain.audioprocessors;
 
 import dasp5000.domain.AudioContainer;
 import dasp5000.domain.DynamicArray;
+import javax.sound.sampled.AudioFormat;
 
 /**
  * Mixes the signals together
@@ -35,6 +36,13 @@ public class Mixer implements AudioProcessor {
             }
         }
         this.mixLength = longestAudio();
+        AudioFormat audioFormat 
+                = copyAudioFormatProperties(audioContainers[0].getAudioFormat());
+        this.mix = new AudioContainer(audioFormat);
+    }
+
+    public AudioContainer getMix() {
+        return mix;
     }
     
     public void addAudioContainer(AudioContainer audioContainer) {
@@ -56,8 +64,10 @@ public class Mixer implements AudioProcessor {
                     mix = mix + sample - mix * sample;
                 }
             }
-            int mixedSample = doubleToSample(mix);
+            int mixedSample = doubleToSample(mix, maxSample);
+            wordMix.add(mixedSample);
         }
+        this.mix.setWords(wordMix);
     }
 
     private long longestAudio() {
@@ -73,5 +83,17 @@ public class Mixer implements AudioProcessor {
     
     private double sampleToDouble(int sample, int max) {
         return sample / max;
+    }
+
+    private int doubleToSample(double mix, int maxSample) {
+        return (int)(mix * maxSample);
+    }
+
+    private AudioFormat copyAudioFormatProperties(AudioFormat audioFormat) {
+        AudioFormat newAudioFormat = new AudioFormat(audioFormat.getSampleRate(), 
+                bitsPerSample, 
+                audioFormat.getChannels(), true, 
+                audioFormat.isBigEndian());
+        return newAudioFormat;
     }
 }
