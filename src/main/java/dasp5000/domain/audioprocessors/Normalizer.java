@@ -2,7 +2,7 @@
 package dasp5000.domain.audioprocessors;
 
 import dasp5000.domain.AudioAnalysis;
-import dasp5000.domain.AudioContainer;
+import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
 import dasp5000.utils.DecibelConverter;
 
@@ -13,7 +13,7 @@ import dasp5000.utils.DecibelConverter;
  * @author Petri Kallio
  */
 public class Normalizer implements AudioProcessor {
-    private final AudioContainer audioContainer;
+    private final MonoAudio audioContainer;
     private double dBFSMaxLevel;
     
     /**
@@ -22,7 +22,7 @@ public class Normalizer implements AudioProcessor {
      * @param audioContainer The AudioContainer that contains the data to process.
      * @param dBFSMaxLevel The desired maximum level of audio in dBFS scale.
      */
-    public Normalizer(AudioContainer audioContainer, double dBFSMaxLevel) {
+    public Normalizer(MonoAudio audioContainer, double dBFSMaxLevel) {
         this.audioContainer = audioContainer;
         this.dBFSMaxLevel = dBFSMaxLevel;
     }
@@ -30,7 +30,7 @@ public class Normalizer implements AudioProcessor {
     @Override
     public void process() {
         double expansionMultiplier = calculateExpansionMultiplier();
-        DynamicArray<Integer> data = audioContainer.getWords();
+        DynamicArray<Integer> data = audioContainer.getLeftChannel();
         for (int i = 0; i < data.size(); i++) {
             int newValue = (int)(data.get(i) * expansionMultiplier);
             data.replace(i, newValue);
@@ -39,7 +39,7 @@ public class Normalizer implements AudioProcessor {
     }
 
     private double calculateExpansionMultiplier() {
-        int max = (int)Math.pow(2, audioContainer.getBitDepth());
+        int max = (int)Math.pow(2, audioContainer.getBitsPerAudioSample());
         int dBFSMaxInSampleValue 
                 = DecibelConverter.dBFSToSampleValue(dBFSMaxLevel, 
                         max);

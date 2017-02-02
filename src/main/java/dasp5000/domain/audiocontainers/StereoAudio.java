@@ -1,6 +1,8 @@
 
-package dasp5000.domain;
+package dasp5000.domain.audiocontainers;
 
+import dasp5000.domain.AudioAnalysis;
+import dasp5000.domain.DynamicArray;
 import javax.sound.sampled.AudioFormat;
 
 /**
@@ -9,9 +11,10 @@ import javax.sound.sampled.AudioFormat;
  * 
  * @author Petri Kallio
  */
-public class AudioContainer {
+public class StereoAudio implements AudioContainer {
     private AudioAnalysis audioAnalysis;
-    private DynamicArray<Integer> words;
+    private DynamicArray<Integer> leftChannel;
+    private DynamicArray<Integer> rightChannel;
     private final AudioFormat audioFormat;
 
     /**
@@ -19,7 +22,7 @@ public class AudioContainer {
      * 
      * @param audioFormat The AudioFormat object of the corresponding AudioInputStream.
      */
-    public AudioContainer(AudioFormat audioFormat) {
+    public StereoAudio(AudioFormat audioFormat) {
         this.audioFormat = audioFormat;
     }
     
@@ -29,6 +32,7 @@ public class AudioContainer {
      * 
      * @param audioAnalysis 
      */
+    @Override
     public void setAudioAnalysis(AudioAnalysis audioAnalysis) {
         this.audioAnalysis = audioAnalysis;
     }
@@ -37,10 +41,12 @@ public class AudioContainer {
      * Sets the DynamicArray that contains all the words that are composed of
      * a AudioInputStream's bytes based on its bit depth (e.g. 16 bits per sample).
      * 
-     * @param words Contains bytes combined as words
+     * @param audioData Contains bytes combined as words
      */
-    public void setWords(DynamicArray<Integer> words) {
-        this.words = words;
+    @Override
+    public void setAudioData(DynamicArray<Integer>... audioData) {
+        this.leftChannel = audioData[0];
+        this.rightChannel = audioData[1];
     }
     
     /**
@@ -48,6 +54,7 @@ public class AudioContainer {
      * 
      * @return 
      */
+    @Override
     public int getNumberOfChannels() {
         return this.audioFormat.getChannels();
     }
@@ -58,7 +65,8 @@ public class AudioContainer {
      * 
      * @return 
      */
-    public int getBitDepth() {
+    @Override
+    public int getBitsPerAudioSample() {
         return this.audioFormat.getSampleSizeInBits();
     }
     
@@ -67,6 +75,7 @@ public class AudioContainer {
      * 
      * @return 
      */
+    @Override
     public float getSampleRate() {
         return this.audioFormat.getSampleRate();
     }
@@ -77,6 +86,7 @@ public class AudioContainer {
      * 
      * @return 
      */
+    @Override
     public boolean isBigEndian() {
         return this.audioFormat.isBigEndian();
     }
@@ -86,8 +96,14 @@ public class AudioContainer {
      * 
      * @return 
      */
-    public DynamicArray<Integer> getWords() {
-        return words;
+    @Override
+    public DynamicArray<Integer> getLeftChannel() {
+        return leftChannel;
+    }
+    
+    @Override
+    public DynamicArray<Integer> getRightChannel() {
+        return rightChannel;
     }
 
     /**
@@ -95,6 +111,7 @@ public class AudioContainer {
      * 
      * @return 
      */
+    @Override
     public AudioAnalysis getAudioAnalysis() {
         return audioAnalysis;
     }
@@ -104,8 +121,19 @@ public class AudioContainer {
      * 
      * @return 
      */
+    @Override
     public AudioFormat getAudioFormat() {
         return audioFormat;
+    }
+
+    @Override
+    public void setLeftChannel(DynamicArray<Integer> audioData) {
+        this.leftChannel = audioData;
+    }
+
+    @Override
+    public void setRightChannel(DynamicArray<Integer> audioData) {
+        this.rightChannel = audioData;
     }
     
 }

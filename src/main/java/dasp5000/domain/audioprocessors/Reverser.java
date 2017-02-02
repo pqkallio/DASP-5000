@@ -1,7 +1,7 @@
 
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.AudioContainer;
+import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
 
 /**
@@ -10,15 +10,15 @@ import dasp5000.domain.DynamicArray;
  * @author Petri Kallio
  */
 public class Reverser implements AudioProcessor {
-    private final AudioContainer audioContainer;
+    private final MonoAudio audioContainer;
 
-    public Reverser(AudioContainer audioContainer) {
+    public Reverser(MonoAudio audioContainer) {
         this.audioContainer = audioContainer;
     }
     
     @Override
     public void process() {
-        DynamicArray<Integer> data = audioContainer.getWords();
+        DynamicArray<Integer> data = audioContainer.getLeftChannel();
         int j = data.size() - 1;
         for (int i = 0; i < data.size() / 2; i++) {
             switchSamples(i, j, data);

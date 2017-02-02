@@ -2,7 +2,7 @@
 package dasp5000;
 
 import dasp5000.controllers.AudioController;
-import dasp5000.domain.AudioContainer;
+import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.audioprocessors.Mixer;
 import dasp5000.domain.audioprocessors.Normalizer;
 import dasp5000.domain.audioprocessors.Reverser;
@@ -40,7 +40,7 @@ public class DASP5000 {
         Mixer mixer = new Mixer(controller1.getAudioContainer(), 
                 controller2.getAudioContainer());
         mixer.process();
-        AudioContainer mix = mixer.getMix();
+        MonoAudio mix = mixer.getMix();
         AudioController mixed = new AudioController(mix);
         mixed.printAudioAnalysis();
         if (args.length > 2) {

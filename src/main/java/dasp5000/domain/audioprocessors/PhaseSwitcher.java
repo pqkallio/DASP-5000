@@ -1,7 +1,7 @@
 
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.AudioContainer;
+import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
 
 /**
@@ -10,15 +10,15 @@ import dasp5000.domain.DynamicArray;
  * @author Petri Kallio
  */
 public class PhaseSwitcher implements AudioProcessor {
-    private final AudioContainer audioContainer;
+    private final MonoAudio audioContainer;
     
-    public PhaseSwitcher(AudioContainer audioContainer) {
+    public PhaseSwitcher(MonoAudio audioContainer) {
         this.audioContainer = audioContainer;
     }
     
     @Override
     public void process() {
-        DynamicArray<Integer> data = audioContainer.getWords();
+        DynamicArray<Integer> data = audioContainer.getLeftChannel();
         for (int i = 0; i < data.size(); i++) {
             int newValue = -1 * data.get(i);
             data.replace(i, newValue);

@@ -1,7 +1,7 @@
 
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.AudioContainer;
+import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
 import javax.sound.sampled.AudioFormat;
 
@@ -11,21 +11,21 @@ import javax.sound.sampled.AudioFormat;
  * @author Petri Kallio
  */
 public class Mixer implements AudioProcessor {
-    private DynamicArray<AudioContainer> audioContainers;
-    private AudioContainer mix;
+    private DynamicArray<MonoAudio> audioContainers;
+    private MonoAudio mix;
     private long mixLength;
     private int bitsPerSample;
 
-    public Mixer(AudioContainer... audioContainers) {
+    public Mixer(MonoAudio... audioContainers) {
         if (audioContainers.length == 0) {
             throw new IllegalArgumentException("No AudioContainers supplied");
         }
         this.mixLength = 0;
-        this.bitsPerSample = audioContainers[0].getBitDepth();
-        this.audioContainers = new DynamicArray<>(AudioContainer.class);
+        this.bitsPerSample = audioContainers[0].getBitsPerAudioSample();
+        this.audioContainers = new DynamicArray<>(MonoAudio.class);
         for (int i = 0; i < audioContainers.length; i++) {
-            AudioContainer ac = audioContainers[i];
-            if (ac.getBitDepth() != this.bitsPerSample) {
+            MonoAudio ac = audioContainers[i];
+            if (ac.getBitsPerAudioSample() != this.bitsPerSample) {
                 throw new IllegalArgumentException("The AudioContainers' "
                         + "sample resolution must match");
             }
@@ -38,14 +38,14 @@ public class Mixer implements AudioProcessor {
         this.mixLength = longestAudio();
         AudioFormat audioFormat 
                 = copyAudioFormatProperties(audioContainers[0].getAudioFormat());
-        this.mix = new AudioContainer(audioFormat);
+        this.mix = new MonoAudio(audioFormat);
     }
 
-    public AudioContainer getMix() {
+    public MonoAudio getMix() {
         return mix;
     }
     
-    public void addAudioContainer(AudioContainer audioContainer) {
+    public void addAudioContainer(MonoAudio audioContainer) {
         this.audioContainers.add(audioContainer);
         this.mixLength = longestAudio();
     }
@@ -57,9 +57,9 @@ public class Mixer implements AudioProcessor {
         for (long i = 0; i < mixLength; i++) {
             double mix = 0;
             for (int j = 0; j < audioContainers.size(); j++) {
-                AudioContainer ac = audioContainers.get(j);
+                MonoAudio ac = audioContainers.get(j);
                 if (ac.getAudioAnalysis().getSamples() > i) {
-                    double sample = sampleToDouble(ac.getWords().get((int)i), 
+                    double sample = sampleToDouble(ac.getLeftChannel().get((int)i), 
                             maxSample);
                     mix = mix + sample - mix * sample;
                 }
@@ -67,7 +67,7 @@ public class Mixer implements AudioProcessor {
             int mixedSample = doubleToSample(mix, maxSample);
             wordMix.add(mixedSample);
         }
-        this.mix.setWords(wordMix);
+        this.mix.setAudioData(wordMix);
     }
 
     private long longestAudio() {

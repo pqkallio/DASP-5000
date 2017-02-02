@@ -2,7 +2,7 @@
 package dasp5000.controllers;
 
 import dasp5000.domain.AudioAnalysis;
-import dasp5000.domain.AudioContainer;
+import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.audioprocessors.Analyzer;
 import dasp5000.domain.streamhandlers.AudioFileHandler;
 import dasp5000.utils.ByteToWordConverter;
@@ -22,7 +22,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  */
 public class AudioController {
     private final String fileName;
-    private final AudioContainer audioContainer;
+    private final MonoAudio audioContainer;
 
     /**
      * Constructs a new AudioController object.
@@ -35,18 +35,16 @@ public class AudioController {
         this.fileName = fileName;
         AudioInputStream audioInputStream = openAudioInputStream(this.fileName);
         
-        this.audioContainer = new AudioContainer(audioInputStream.getFormat());
+        this.audioContainer = new MonoAudio(audioInputStream.getFormat());
         processAudioBytes(this.audioContainer, audioInputStream);
-        AudioAnalysis analysis = Analyzer.analyse(this.audioContainer.getWords());
-        this.audioContainer.setAudioAnalysis(analysis);
+        Analyzer.analyse(this.audioContainer);
     }
     
-    public AudioController(AudioContainer audioContainer) {
+    public AudioController(MonoAudio audioContainer) {
         this.audioContainer = audioContainer;
         this.fileName = null;
         if (this.audioContainer.getAudioAnalysis() == null) {
-            AudioAnalysis analysis = Analyzer.analyse(this.audioContainer.getWords());
-            this.audioContainer.setAudioAnalysis(analysis);
+            Analyzer.analyse(this.audioContainer);
         }
     }
     
@@ -66,10 +64,10 @@ public class AudioController {
         return audioInputStream;
     }
 
-    private void processAudioBytes(AudioContainer audioContainer, 
+    private void processAudioBytes(MonoAudio audioContainer, 
             AudioInputStream audioInputStream) {
         ByteToWordConverter converter 
-                = new ByteToWordConverter(audioContainer.getBitDepth(), 
+                = new ByteToWordConverter(audioContainer.getBitsPerAudioSample(), 
                                           audioContainer.isBigEndian());
         int numBytes = 1024;
         byte[] audioBytes = new byte[numBytes];
@@ -81,20 +79,20 @@ public class AudioController {
         } catch (IOException ex) {
             System.out.println(ex.toString());
         }
-        audioContainer.setWords(converter.getWords());
+        audioContainer.setAudioData(converter.getWords());
     }
     
     public void writeToFile(String outputFilePath) 
             throws UnsupportedAudioFileException, IOException {
         ByteToWordConverter converter 
-                = new ByteToWordConverter(audioContainer.getBitDepth(), 
+                = new ByteToWordConverter(audioContainer.getBitsPerAudioSample(), 
                                           audioContainer.isBigEndian());
-        converter.setWords(audioContainer.getWords());
+        converter.setWords(audioContainer.getLeftChannel());
         byte[] wordsAsBytes = converter.convertWordsToBytes();
         ByteArrayInputStream byteArrayInputStream 
                 = new ByteArrayInputStream(wordsAsBytes);
         AudioFormat audioFormat = new AudioFormat(audioContainer.getSampleRate(),
-                audioContainer.getBitDepth(),
+                audioContainer.getBitsPerAudioSample(),
                 audioContainer.getNumberOfChannels(), true,
                 audioContainer.isBigEndian());
         AudioInputStream audioInputStream 
@@ -104,7 +102,7 @@ public class AudioController {
         AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputFile);
     } 
 
-    public AudioContainer getAudioContainer() {
+    public MonoAudio getAudioContainer() {
         return audioContainer;
     }
     
@@ -114,8 +112,8 @@ public class AudioController {
      */
     public void printAudioAnalysis() {
         AudioAnalysis analysis = this.audioContainer.getAudioAnalysis();
-        System.out.println("Minimum sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getMinimumSampleValue(), (int)Math.pow(2, this.audioContainer.getBitDepth())));
-        System.out.println("Peak sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getPeakSampleValue(), (int)Math.pow(2, this.audioContainer.getBitDepth())));
+        System.out.println("Minimum sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getMinimumSampleValue(), (int)Math.pow(2, this.audioContainer.getBitsPerAudioSample())));
+        System.out.println("Peak sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getPeakSampleValue(), (int)Math.pow(2, this.audioContainer.getBitsPerAudioSample())));
         double time = 1.0 * analysis.getSamples() / this.audioContainer.getSampleRate();
         System.out.println("Audio clip length: " + (int)Math.floor(time / 60) + " minutes " + time % 60 + " seconds");
     }
