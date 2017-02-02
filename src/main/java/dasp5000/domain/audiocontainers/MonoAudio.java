@@ -13,7 +13,7 @@ import javax.sound.sampled.AudioFormat;
  */
 public class MonoAudio implements AudioContainer {
     private AudioAnalysis audioAnalysis;
-    private DynamicArray<Integer> audioData;
+    private final DynamicArray<Integer>[] audioData;
     private final AudioFormat audioFormat;
 
     /**
@@ -23,6 +23,7 @@ public class MonoAudio implements AudioContainer {
      */
     public MonoAudio(AudioFormat audioFormat) {
         this.audioFormat = audioFormat;
+        this.audioData = new DynamicArray[1];
     }
     
     /**
@@ -44,7 +45,7 @@ public class MonoAudio implements AudioContainer {
      */
     @Override
     public void setAudioData(DynamicArray<Integer>... audioData) {
-        this.audioData = audioData[0];
+        this.audioData[0] = audioData[0];
     }
     
     /**
@@ -96,12 +97,12 @@ public class MonoAudio implements AudioContainer {
      */
     @Override
     public DynamicArray<Integer> getLeftChannel() {
-        return audioData;
+        return audioData[0];
     }
     
     @Override
     public DynamicArray<Integer> getRightChannel() {
-        return audioData;
+        return audioData[0];
     }
     
     /**
@@ -126,12 +127,17 @@ public class MonoAudio implements AudioContainer {
 
     @Override
     public void setLeftChannel(DynamicArray<Integer> audioData) {
-        this.audioData = audioData;
+        this.audioData[0] = audioData;
     }
 
     @Override
     public void setRightChannel(DynamicArray<Integer> audioData) {
-        this.audioData = audioData;
+        this.audioData[0] = audioData;
+    }
+
+    @Override
+    public DynamicArray<Integer>[] getData() {
+        return audioData;
     }
     
 }

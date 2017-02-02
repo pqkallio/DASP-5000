@@ -2,6 +2,7 @@
 package dasp5000.controllers;
 
 import dasp5000.domain.AudioAnalysis;
+import dasp5000.domain.audiocontainers.AudioContainer;
 import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.audioprocessors.Analyzer;
 import dasp5000.domain.streamhandlers.AudioFileHandler;
@@ -22,7 +23,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  */
 public class AudioController {
     private final String fileName;
-    private final MonoAudio audioContainer;
+    private final AudioContainer audioContainer;
 
     /**
      * Constructs a new AudioController object.
@@ -64,11 +65,11 @@ public class AudioController {
         return audioInputStream;
     }
 
-    private void processAudioBytes(MonoAudio audioContainer, 
+    private void processAudioBytes(AudioContainer audioContainer, 
             AudioInputStream audioInputStream) {
-        ByteToWordConverter converter 
-                = new ByteToWordConverter(audioContainer.getBitsPerAudioSample(), 
-                                          audioContainer.isBigEndian());
+        ByteToWordConverter[] converters 
+                = createConverters(audioContainer);
+        
         int numBytes = 1024;
         byte[] audioBytes = new byte[numBytes];
         try {
@@ -102,7 +103,7 @@ public class AudioController {
         AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputFile);
     } 
 
-    public MonoAudio getAudioContainer() {
+    public AudioContainer getAudioContainer() {
         return audioContainer;
     }
     
@@ -116,5 +117,17 @@ public class AudioController {
         System.out.println("Peak sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getPeakSampleValue(), (int)Math.pow(2, this.audioContainer.getBitsPerAudioSample())));
         double time = 1.0 * analysis.getSamples() / this.audioContainer.getSampleRate();
         System.out.println("Audio clip length: " + (int)Math.floor(time / 60) + " minutes " + time % 60 + " seconds");
+    }
+
+    private ByteToWordConverter[] createConverters(AudioContainer audioContainer) {
+        ByteToWordConverter[] converters 
+                = new ByteToWordConverter[audioContainer.getNumberOfChannels()];
+        
+        for (int i = 0; i < audioContainer.getNumberOfChannels(); i++) {
+            converters[i] = new ByteToWordConverter(audioContainer.getBitsPerAudioSample(), 
+                                          audioContainer.isBigEndian());
+        }
+        
+        return converters;
     }
 }

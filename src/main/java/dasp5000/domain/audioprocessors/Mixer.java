@@ -35,7 +35,6 @@ public class Mixer implements AudioProcessor {
                 this.mixLength = samples;
             }
         }
-        this.mixLength = longestAudio();
         AudioFormat audioFormat 
                 = copyAudioFormatProperties(audioContainers[0].getAudioFormat());
         this.mix = new MonoAudio(audioFormat);
@@ -55,16 +54,21 @@ public class Mixer implements AudioProcessor {
         DynamicArray<Integer> wordMix = new DynamicArray<>(Integer.class);
         int maxSample = (int)Math.pow(2, bitsPerSample) / 2;
         for (long i = 0; i < mixLength; i++) {
-            double mix = 0;
+            double mixValue = 0;
             for (int j = 0; j < audioContainers.size(); j++) {
                 MonoAudio ac = audioContainers.get(j);
                 if (ac.getAudioAnalysis().getSamples() > i) {
                     double sample = sampleToDouble(ac.getLeftChannel().get((int)i), 
                             maxSample);
-                    mix = mix + sample - mix * sample;
+                    double newValue = mixValue + sample;
+                    if (newValue > 0) {
+                        mixValue = newValue - mixValue * sample;
+                    } else {
+                        mixValue = newValue + mixValue * sample;
+                    }
                 }
             }
-            int mixedSample = doubleToSample(mix, maxSample);
+            int mixedSample = doubleToSample(mixValue, maxSample);
             wordMix.add(mixedSample);
         }
         this.mix.setAudioData(wordMix);

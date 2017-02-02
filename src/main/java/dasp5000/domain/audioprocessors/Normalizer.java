@@ -35,7 +35,7 @@ public class Normalizer implements AudioProcessor {
             int newValue = (int)(data.get(i) * expansionMultiplier);
             data.replace(i, newValue);
         }
-        audioContainer.setAudioAnalysis(calculateNewAnalysis(data));
+        Analyzer.analyse(audioContainer);
     }
 
     private double calculateExpansionMultiplier() {
@@ -46,11 +46,6 @@ public class Normalizer implements AudioProcessor {
         int currentPeakSampleValue 
                 = audioContainer.getAudioAnalysis().getPeakSampleValue();
         return 1.0 * dBFSMaxInSampleValue / currentPeakSampleValue;
-    }
-
-    private AudioAnalysis calculateNewAnalysis(DynamicArray<Integer> data) {
-        AudioAnalysis analysis = Analyzer.analyse(data);
-        return analysis;
     }
 
     public void setdBFSMaxLevel(double dBFSMaxLevel) {

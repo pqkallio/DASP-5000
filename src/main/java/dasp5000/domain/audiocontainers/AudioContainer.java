@@ -22,4 +22,5 @@ public interface AudioContainer {
     public void setRightChannel(DynamicArray<Integer> audioData);
     public DynamicArray<Integer> getLeftChannel();
     public DynamicArray<Integer> getRightChannel();
+    public DynamicArray<Integer>[] getData();
 }

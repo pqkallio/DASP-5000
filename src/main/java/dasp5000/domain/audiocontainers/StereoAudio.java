@@ -13,8 +13,7 @@ import javax.sound.sampled.AudioFormat;
  */
 public class StereoAudio implements AudioContainer {
     private AudioAnalysis audioAnalysis;
-    private DynamicArray<Integer> leftChannel;
-    private DynamicArray<Integer> rightChannel;
+    private DynamicArray<Integer>[] audioData;
     private final AudioFormat audioFormat;
 
     /**
@@ -24,6 +23,7 @@ public class StereoAudio implements AudioContainer {
      */
     public StereoAudio(AudioFormat audioFormat) {
         this.audioFormat = audioFormat;
+        this.audioData = new DynamicArray[2];
     }
     
     /**
@@ -45,8 +45,8 @@ public class StereoAudio implements AudioContainer {
      */
     @Override
     public void setAudioData(DynamicArray<Integer>... audioData) {
-        this.leftChannel = audioData[0];
-        this.rightChannel = audioData[1];
+        this.audioData[0] = audioData[0];
+        this.audioData[1] = audioData[1];
     }
     
     /**
@@ -98,12 +98,12 @@ public class StereoAudio implements AudioContainer {
      */
     @Override
     public DynamicArray<Integer> getLeftChannel() {
-        return leftChannel;
+        return audioData[0];
     }
     
     @Override
     public DynamicArray<Integer> getRightChannel() {
-        return rightChannel;
+        return audioData[1];
     }
 
     /**
@@ -128,12 +128,17 @@ public class StereoAudio implements AudioContainer {
 
     @Override
     public void setLeftChannel(DynamicArray<Integer> audioData) {
-        this.leftChannel = audioData;
+        this.audioData[0] = audioData;
     }
 
     @Override
     public void setRightChannel(DynamicArray<Integer> audioData) {
-        this.rightChannel = audioData;
+        this.audioData[1] = audioData;
+    }
+
+    @Override
+    public DynamicArray<Integer>[] getData() {
+        return this.audioData;
     }
     
 }

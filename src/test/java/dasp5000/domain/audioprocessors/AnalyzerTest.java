@@ -7,6 +7,9 @@ package dasp5000.domain.audioprocessors;
 
 import dasp5000.domain.AudioAnalysis;
 import dasp5000.domain.DynamicArray;
+import dasp5000.domain.audiocontainers.AudioContainer;
+import dasp5000.domain.audiocontainers.MonoAudio;
+import javax.sound.sampled.AudioFormat;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,9 +22,9 @@ import static org.junit.Assert.*;
  * @author petrikallio
  */
 public class AnalyzerTest {
-    private Analyzer analyzer;
     private DynamicArray<Integer> data;
     private DynamicArray<Integer> single;
+    private AudioContainer audioContainer;
     
     public AnalyzerTest() {
     }
@@ -36,7 +39,6 @@ public class AnalyzerTest {
     
     @Before
     public void setUp() {
-        this.analyzer = new Analyzer();
         this.data = new DynamicArray<>(Integer.class);
         this.data.add(-3);
         this.data.add(87);
@@ -46,6 +48,7 @@ public class AnalyzerTest {
         this.data.add(10);
         this.single = new DynamicArray<>(Integer.class);
         this.single.add(0);
+        this.audioContainer = new MonoAudio(new AudioFormat(44100, 16, 1, true, false));
     }
     
     @After
@@ -54,61 +57,70 @@ public class AnalyzerTest {
     
     @Test(expected = NullPointerException.class)
     public void nullPointerExceptionIfParameterForAnalyseIsNull() {
-        AudioAnalysis analysis = this.analyzer.analyse(null);
+        Analyzer.analyse(null);
     }
     
     @Test
     public void thePeakValueIsMinimumForEmptyParameter() {
-        AudioAnalysis analysis = this.analyzer.analyse(new DynamicArray<Integer>(Integer.class));
-        assertEquals(analysis.getPeakSampleValue(), Integer.MIN_VALUE);
+        this.audioContainer.setAudioData(new DynamicArray<Integer>(Integer.class));
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(this.audioContainer.getAudioAnalysis().getPeakSampleValue(), Integer.MIN_VALUE);
     }
     
     @Test
     public void theMinimumValueIsMaximumForEmptyParameter() {
-        AudioAnalysis analysis = this.analyzer.analyse(new DynamicArray<Integer>(Integer.class));
-        assertEquals(analysis.getMinimumSampleValue(), Integer.MAX_VALUE);
+        this.audioContainer.setAudioData(new DynamicArray<Integer>(Integer.class));
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(audioContainer.getAudioAnalysis().getMinimumSampleValue(), Integer.MAX_VALUE);
     }
     
     @Test
     public void theSamplesValueIsZeroForEmptyParameter() {
-        AudioAnalysis analysis = this.analyzer.analyse(new DynamicArray<Integer>(Integer.class));
-        assertEquals(analysis.getSamples(), 0);
+        this.audioContainer.setAudioData(new DynamicArray<Integer>(Integer.class));
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(audioContainer.getAudioAnalysis().getSamples(), 0);
     }
     
     @Test
     public void thePeakValueIsSetProperlyForPopulatedArray() {
-        AudioAnalysis analysis = this.analyzer.analyse(data);
-        assertEquals(analysis.getPeakSampleValue(), 1000);
+        this.audioContainer.setAudioData(data);
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(this.audioContainer.getAudioAnalysis().getPeakSampleValue(), 1000);
     }
     
     @Test
     public void theMinimumValueIsSetProperlyForPopulatedArray() {
-        AudioAnalysis analysis = this.analyzer.analyse(data);
-        assertEquals(analysis.getMinimumSampleValue(), 3);
+        this.audioContainer.setAudioData(data);
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(audioContainer.getAudioAnalysis().getMinimumSampleValue(), 3);
     }
     
     @Test
     public void theSamplesValueIsProperlySetForPopulatedArray() {
-        AudioAnalysis analysis = this.analyzer.analyse(data);
-        assertEquals(analysis.getSamples(), 6);
+        this.audioContainer.setAudioData(data);
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(audioContainer.getAudioAnalysis().getSamples(), 6);
     }
     
     @Test
     public void thePeakValueIsSetProperlyForSingleValueArray() {
-        AudioAnalysis analysis = this.analyzer.analyse(single);
-        assertEquals(analysis.getPeakSampleValue(), 0);
+        this.audioContainer.setAudioData(single);
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(audioContainer.getAudioAnalysis().getPeakSampleValue(), 0);
     }
     
     @Test
     public void theMinimumValueIsSetProperlyForSingleValueArray() {
-        AudioAnalysis analysis = this.analyzer.analyse(single);
-        assertEquals(analysis.getMinimumSampleValue(), 0);
+        this.audioContainer.setAudioData(single);
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(audioContainer.getAudioAnalysis().getMinimumSampleValue(), 0);
     }
     
     @Test
     public void theSamplesValueIsProperlySetForSingleValueArray() {
-        AudioAnalysis analysis = this.analyzer.analyse(single);
-        assertEquals(analysis.getSamples(), 1);
+        this.audioContainer.setAudioData(single);
+        Analyzer.analyse(this.audioContainer);
+        assertEquals(audioContainer.getAudioAnalysis().getSamples(), 1);
     }
 
 }

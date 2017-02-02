@@ -15,22 +15,19 @@ import dasp5000.domain.audiocontainers.StereoAudio;
 public class Analyzer {
     
     /**
-     * Analyses the given DynamicArray of words. Returns the analysis as 
-     * an AudioAnalysis object.
+     * Analyses the given AudioContainer object's audio data and saves the 
+     * analysis to the AudioContainer object. 
      * 
-     * @param words
-     * @return 
+     * @param audioContainer 
      */
-    public static AudioAnalysis analyse(AudioContainer audioContainer) {
-        korjaa!
+    public static void analyse(AudioContainer audioContainer) {
         AudioAnalysis analysis = null;
         if (audioContainer.getClass() == MonoAudio.class) {
             analysis = analyseMonoAudio(audioContainer);
         } else if (audioContainer.getClass() == StereoAudio.class) {
             analysis = analyseStereoAudio(audioContainer); 
         }
-        
-        return analysis;
+        audioContainer.setAudioAnalysis(analysis);
     }
 
     private static AudioAnalysis analyseMonoAudio(AudioContainer audioContainer) {
