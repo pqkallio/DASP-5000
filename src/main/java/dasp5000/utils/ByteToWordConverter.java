@@ -26,7 +26,7 @@ public class ByteToWordConverter {
         this.bigEndian = bigEndian;
     }
     
-    private int byteToWordConversion(byte[] bytes) {
+    public int byteToWordConversion(byte[] bytes) {
         int word = bytes[0];
         for (int i = 1; i < bytesPerWord; i++) {
             word = (word << 8) | (bytes[i] & 0xff);

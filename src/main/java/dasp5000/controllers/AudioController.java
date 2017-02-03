@@ -75,12 +75,12 @@ public class AudioController {
         try {
             int numBytesRead = 0;
             while ((numBytesRead = audioInputStream.read(audioBytes)) != -1) {
-                converter.insertBytesToWordArray(audioBytes, numBytesRead);
+//                converter.insertBytesToWordArray(audioBytes, numBytesRead);
             }
         } catch (IOException ex) {
             System.out.println(ex.toString());
         }
-        audioContainer.setAudioData(converter.getWords());
+//        audioContainer.setAudioData(converter.getWords());
     }
     
     public void writeToFile(String outputFilePath) 

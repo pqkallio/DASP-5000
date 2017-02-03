@@ -7,6 +7,8 @@ import dasp5000.domain.audioprocessors.Mixer;
 import dasp5000.domain.audioprocessors.Normalizer;
 import dasp5000.domain.audioprocessors.PhaseSwitcher;
 import dasp5000.domain.audioprocessors.Reverser;
+import dasp5000.utils.RiffParser;
+import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -22,41 +24,46 @@ public class DASP5000 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
-        AudioController controller1;
-        AudioController controller2;
-        AudioController controller3;
-        if (args.length > 0) {
-            try {
-                controller1 = new AudioController(args[0]);
-                controller2 = new AudioController(args[1]);
-                controller3 = new AudioController(args[2]);
-            } catch (UnsupportedAudioFileException | IOException ex) {
-                System.out.println(ex.toString());
-                return;
-            }
-        } else {
-            return;
-        }
-        
-        Normalizer normalizer1 = new Normalizer(controller1.getAudioContainer(), -24);
-        Normalizer normalizer2 = new Normalizer(controller2.getAudioContainer(), -24);
-        Normalizer normalizer3 = new Normalizer(controller3.getAudioContainer(), -24);
-        normalizer1.process();
-        normalizer2.process();
-        normalizer3.process();
-        controller1.printAudioAnalysis();
-        controller2.printAudioAnalysis();
-        controller3.printAudioAnalysis();
-        Mixer mixer = new Mixer(controller1.getAudioContainer(), 
-                controller2.getAudioContainer(), 
-                controller3.getAudioContainer());
-        mixer.process();
-        MonoAudio mix = mixer.getMix();
-        AudioController mixed = new AudioController(mix);
-        mixed.printAudioAnalysis();
-        if (args.length > 3) {
-            mixed.writeToFile(args[3]);
-        }
+        File file = new File("/home/pqkallio/wavtest/mono.wav");
+        RiffParser.parseFile(file);
+        System.out.println("");
+        File file2 = new File("/home/pqkallio/wavtest/test2.wav");
+        RiffParser.parseFile(file2);
+//        AudioController controller1;
+//        AudioController controller2;
+//        AudioController controller3;
+//        if (args.length > 0) {
+//            try {
+//                controller1 = new AudioController(args[0]);
+//                controller2 = new AudioController(args[1]);
+//                controller3 = new AudioController(args[2]);
+//            } catch (UnsupportedAudioFileException | IOException ex) {
+//                System.out.println(ex.toString());
+//                return;
+//            }
+//        } else {
+//            return;
+//        }
+//        
+//        Normalizer normalizer1 = new Normalizer(controller1.getAudioContainer(), -24);
+//        Normalizer normalizer2 = new Normalizer(controller2.getAudioContainer(), -24);
+//        Normalizer normalizer3 = new Normalizer(controller3.getAudioContainer(), -24);
+//        normalizer1.process();
+//        normalizer2.process();
+//        normalizer3.process();
+//        controller1.printAudioAnalysis();
+//        controller2.printAudioAnalysis();
+//        controller3.printAudioAnalysis();
+//        Mixer mixer = new Mixer(controller1.getAudioContainer(), 
+//                controller2.getAudioContainer(), 
+//                controller3.getAudioContainer());
+//        mixer.process();
+//        MonoAudio mix = mixer.getMix();
+//        AudioController mixed = new AudioController(mix);
+//        mixed.printAudioAnalysis();
+//        if (args.length > 3) {
+//            mixed.writeToFile(args[3]);
+//        }
     }
     
 }
