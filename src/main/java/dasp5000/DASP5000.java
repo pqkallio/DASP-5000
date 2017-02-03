@@ -25,10 +25,8 @@ public class DASP5000 {
      */
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
         File file = new File("/home/pqkallio/wavtest/mono.wav");
-        RiffParser.parseFile(file);
-        System.out.println("");
         File file2 = new File("/home/pqkallio/wavtest/test2.wav");
-        RiffParser.parseFile(file2);
+        RiffParser parser = new RiffParser(file2);
 //        AudioController controller1;
 //        AudioController controller2;
 //        AudioController controller3;

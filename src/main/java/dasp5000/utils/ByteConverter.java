@@ -9,7 +9,43 @@ import dasp5000.domain.DynamicArray;
  * 
  * @author Petri Kallio
  */
-public class ByteToWordConverter {
+public class ByteConverter {
+
+    public static int byteToIntConversion(byte[] bytes, int bytesN, 
+            boolean bigEndian) {
+        if (bytesN < 1) {
+            throw new IllegalArgumentException("The number of bytes must be "
+                    + "equal to or greater than 1");
+        }
+        
+        if (bigEndian) {
+            return parseBigEndian(bytes, bytesN);
+        } else {
+            return parseLittleEndian(bytes, bytesN);
+        }
+    }
+    
+    private static int parseBigEndian(byte[] bytes, int bytesN) {
+        int value = bytes[0];
+        if (bytesN > 1) {
+            for (int i = 1; i < bytesN; i++) {
+                value = (value << 8) | (bytes[i] & 0xff);
+            }
+        }
+        return value;
+    }
+
+    private static int parseLittleEndian(byte[] bytes, int bytesN) {
+        int value = bytes[bytesN - 1];
+        if (bytesN > 1) {
+            for (int i = bytesN - 2; i > -1; i--) {
+                value = (value << 8) | (bytes[i] & 0xff);
+            }
+        }
+        
+        return value;
+    }
+    
     private DynamicArray<Integer> words;
     private final int bytesPerWord;
     private final boolean bigEndian;
@@ -20,7 +56,7 @@ public class ByteToWordConverter {
      * @param bitsPerWord The amount of bits per word
      * @param bigEndian True if bytes are encoded as big-endian, false if little-endian
      */
-    public ByteToWordConverter(int bitsPerWord, boolean bigEndian) {
+    public ByteConverter(int bitsPerWord, boolean bigEndian) {
         this.bytesPerWord = bitsPerWord / 8;
         this.words = new DynamicArray<>(Integer.class);
         this.bigEndian = bigEndian;

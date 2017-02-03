@@ -16,24 +16,24 @@ import static org.junit.Assert.*;
  * @author pqkallio
  */
 public class ByteToWordConverterTest {
-    private ByteToWordConverter littleEndian8bit;
-    private ByteToWordConverter bigEndian8bit;
-    private ByteToWordConverter littleEndian16bit;
-    private ByteToWordConverter bigEndian16bit;
-    private ByteToWordConverter littleEndian32bit;
-    private ByteToWordConverter bigEndian32bit;
+    private ByteConverter littleEndian8bit;
+    private ByteConverter bigEndian8bit;
+    private ByteConverter littleEndian16bit;
+    private ByteConverter bigEndian16bit;
+    private ByteConverter littleEndian32bit;
+    private ByteConverter bigEndian32bit;
     
     public ByteToWordConverterTest() {
     }
     
     @Before
     public void setUp() {
-        this.littleEndian8bit = new ByteToWordConverter(8, false);
-        this.bigEndian8bit = new ByteToWordConverter(8, true);
-        this.littleEndian16bit = new ByteToWordConverter(16, false);
-        this.bigEndian16bit = new ByteToWordConverter(16, true);
-        this.littleEndian32bit = new ByteToWordConverter(32, false);
-        this.bigEndian32bit = new ByteToWordConverter(32, true);
+        this.littleEndian8bit = new ByteConverter(8, false);
+        this.bigEndian8bit = new ByteConverter(8, true);
+        this.littleEndian16bit = new ByteConverter(16, false);
+        this.bigEndian16bit = new ByteConverter(16, true);
+        this.littleEndian32bit = new ByteConverter(32, false);
+        this.bigEndian32bit = new ByteConverter(32, true);
     }
     
     @After
