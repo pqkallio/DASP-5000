@@ -9,24 +9,27 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/**
+ * A class for parsing RIFF WAVE files' data.
+ * 
+ * @author Petri Kallio
+ */
 public class RiffParser {
 
-    private static int parseBytes(byte[] buffer, byte[] bytes, int byteIndex, 
+    /**
+     * Parses a given amount of bytes and inserts them into a buffer.
+     * 
+     * @param buffer the buffer that the bytes are inserted to
+     * @param bytes the array of bytes that the bytes are read from
+     * @param byteIndex the index from which the bytes are read
+     * @param byteN the number of bytes to be read
+     */
+    private static void parseBytes(byte[] buffer, byte[] bytes, int byteIndex, 
             int byteN) {
         for (int i = 0; i < byteN; i++) {
             buffer[i] = bytes[byteIndex];
             byteIndex++;
         }
-        
-        return byteIndex;
-    }
-
-    private static String bufferToString(byte[] buffer, int length) {
-        String string = "";
-        for (int i = 0; i < length; i++) {
-            string += (char)buffer[i];
-        }
-        return string;
     }
     
     private static final String TARGET_CHUNK_ID = "RIFF";
@@ -158,5 +161,13 @@ public class RiffParser {
         }
         
         return array;
+    }
+
+    public DynamicArray<Integer>[] getChannels() {
+        return channels;
+    }
+
+    public AudioHeader getHeader() {
+        return header;
     }
 }

@@ -2,6 +2,7 @@
 package dasp5000;
 
 import dasp5000.controllers.AudioController;
+import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.audioprocessors.Mixer;
 import dasp5000.domain.audioprocessors.Normalizer;
@@ -27,6 +28,9 @@ public class DASP5000 {
         File file = new File("/home/pqkallio/wavtest/mono.wav");
         File file2 = new File("/home/pqkallio/wavtest/test2.wav");
         RiffParser parser = new RiffParser(file2);
+        for (int i = 0; i < parser.getChannels().length; i++) {
+            System.out.println(i + ": " + parser.getChannels()[i].size());
+        }
 //        AudioController controller1;
 //        AudioController controller2;
 //        AudioController controller3;
