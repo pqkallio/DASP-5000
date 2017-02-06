@@ -8,9 +8,11 @@ import dasp5000.domain.audioprocessors.Mixer;
 import dasp5000.domain.audioprocessors.Normalizer;
 import dasp5000.domain.audioprocessors.PhaseSwitcher;
 import dasp5000.domain.audioprocessors.Reverser;
+import dasp5000.utils.ByteConverter;
 import dasp5000.utils.RiffParser;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
@@ -26,7 +28,10 @@ public class DASP5000 {
      */
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
         File file = new File("/home/pqkallio/wavtest/mono.wav");
-        File file2 = new File("/home/pqkallio/wavtest/test2.wav");
+        
+        URL url = ClassLoader.getSystemResource("test.wav");
+        File file2 = new File(url.getPath());
+        System.out.println(file2.exists());
         RiffParser parser = new RiffParser(file2);
         for (int i = 0; i < parser.getChannels().length; i++) {
             System.out.println(i + ": " + parser.getChannels()[i].size());

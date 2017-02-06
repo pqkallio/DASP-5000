@@ -1,8 +1,8 @@
 
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
+import dasp5000.domain.audiocontainers.AudioContainer;
 
 /**
  * An audio processing class that switches the phase of the audio.
@@ -10,12 +10,21 @@ import dasp5000.domain.DynamicArray;
  * @author Petri Kallio
  */
 public class PhaseSwitcher implements AudioProcessor {
-    private final MonoAudio audioContainer;
+    private final AudioContainer audioContainer;
     
-    public PhaseSwitcher(MonoAudio audioContainer) {
+    /**
+     * Creates a new PhaseSwitcher object.
+     * 
+     * @param audioContainer an AudioContainer object
+     */
+    public PhaseSwitcher(AudioContainer audioContainer) {
         this.audioContainer = audioContainer;
     }
     
+    /**
+     * Switches the phase of the audio data by switching the polarity of each 
+     * sample.
+     */
     @Override
     public void process() {
         DynamicArray<Integer> data = audioContainer.getLeftChannel();

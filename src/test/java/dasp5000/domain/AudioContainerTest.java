@@ -60,7 +60,9 @@ public class AudioContainerTest {
     
     @Test
     public void testSetWords() {
-        audioContainer.setAudioData(words);
+        DynamicArray<Integer>[] data = new DynamicArray[1];
+        data[0] = words;
+        audioContainer.setChannels(data);
         assertEquals(audioContainer.getLeftChannel(), words);
     }
 

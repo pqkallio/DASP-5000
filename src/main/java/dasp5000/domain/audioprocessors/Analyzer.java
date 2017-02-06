@@ -18,7 +18,7 @@ public class Analyzer {
      * Analyses the given AudioContainer object's audio data and saves the 
      * analysis to the AudioContainer object. 
      * 
-     * @param audioContainer 
+     * @param audioContainer the AudioContainer object to be analysed 
      */
     public static void analyse(AudioContainer audioContainer) {
         AudioAnalysis analysis = null;

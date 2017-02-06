@@ -28,7 +28,7 @@ public class DecibelConverter {
      * 
      * @param dBFS The value to convert
      * @param maxValue The maximum value to compare the sample value to.
-     * @return 
+     * @return the sample value corresponding to the dBFS value.
      */
     public static int dBFSToSampleValue(double dBFS, int maxValue) {
         return (int)(Math.pow(10, dBFS / 20) * (maxValue / 2));

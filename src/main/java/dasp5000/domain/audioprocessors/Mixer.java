@@ -3,28 +3,35 @@ package dasp5000.domain.audioprocessors;
 
 import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
+import dasp5000.domain.audiocontainers.AudioContainer;
 import javax.sound.sampled.AudioFormat;
 
 /**
- * Mixes the signals together
+ * Mixes multiple audio signals together, creating a single audio signal.
  * 
  * @author Petri Kallio
  */
 public class Mixer implements AudioProcessor {
-    private DynamicArray<MonoAudio> audioContainers;
-    private MonoAudio mix;
+    private DynamicArray<AudioContainer> audioContainers;
+    private AudioContainer mix;
     private long mixLength;
     private int bitsPerSample;
 
-    public Mixer(MonoAudio... audioContainers) {
+    /**
+     * Creates a new Mixer object that can mix the signals of the 
+     * AudioContainers given as parameters.
+     * 
+     * @param audioContainers the AudioContainer's which signals are to be mixed
+     */
+    public Mixer(AudioContainer... audioContainers) {
         if (audioContainers.length == 0) {
             throw new IllegalArgumentException("No AudioContainers supplied");
         }
         this.mixLength = 0;
         this.bitsPerSample = audioContainers[0].getBitsPerAudioSample();
-        this.audioContainers = new DynamicArray<>(MonoAudio.class);
+        this.audioContainers = new DynamicArray<>(AudioContainer.class);
         for (int i = 0; i < audioContainers.length; i++) {
-            MonoAudio ac = audioContainers[i];
+            AudioContainer ac = audioContainers[i];
             if (ac.getBitsPerAudioSample() != this.bitsPerSample) {
                 throw new IllegalArgumentException("The AudioContainers' "
                         + "sample resolution must match");
@@ -40,15 +47,28 @@ public class Mixer implements AudioProcessor {
         this.mix = new MonoAudio(audioFormat);
     }
 
-    public MonoAudio getMix() {
+    /**
+     * Get the mixed audio signal as a AudioContainer object.
+     * 
+     * @return AudioContainer object
+     */
+    public AudioContainer getMix() {
         return mix;
     }
     
-    public void addAudioContainer(MonoAudio audioContainer) {
+    /**
+     * Add a new AudioContainer to the mix.
+     * 
+     * @param audioContainer an AudioContainer object
+     */
+    public void addAudioContainer(AudioContainer audioContainer) {
         this.audioContainers.add(audioContainer);
         this.mixLength = longestAudio();
     }
 
+    /**
+     * Mixes the signals of the AudioContainer objects to a new audio signal.
+     */
     @Override
     public void process() {
         DynamicArray<Integer> wordMix = new DynamicArray<>(Integer.class);
@@ -56,7 +76,7 @@ public class Mixer implements AudioProcessor {
         for (long i = 0; i < mixLength; i++) {
             double mixValue = 0;
             for (int j = 0; j < audioContainers.size(); j++) {
-                MonoAudio ac = audioContainers.get(j);
+                AudioContainer ac = audioContainers.get(j);
                 if (ac.getAudioAnalysis().getSamples() > i) {
                     double sample = sampleToDouble(ac.getLeftChannel().get((int)i), 
                             maxSample);
@@ -71,7 +91,9 @@ public class Mixer implements AudioProcessor {
             int mixedSample = doubleToSample(mixValue, maxSample);
             wordMix.add(mixedSample);
         }
-        this.mix.setAudioData(wordMix);
+        DynamicArray<Integer>[] theMix = new DynamicArray[1];
+        theMix[0] = wordMix;
+        this.mix.setChannels(theMix);
     }
 
     private long longestAudio() {

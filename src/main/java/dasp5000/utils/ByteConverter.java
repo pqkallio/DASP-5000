@@ -11,6 +11,14 @@ import dasp5000.domain.DynamicArray;
  */
 public class ByteConverter {
 
+    /**
+     * Parses an array of bytes into a integer.
+     * 
+     * @param bytes the array of bytes to be parsed
+     * @param bytesN the number of bytes to be parsed
+     * @param bigEndian true is big-endian encoding, false if little-endian
+     * @return the bytes parsed as an integer
+     */
     public static int byteToIntConversion(byte[] bytes, int bytesN, 
             boolean bigEndian) {
         if (bytesN < 1) {
@@ -62,7 +70,13 @@ public class ByteConverter {
         this.bigEndian = bigEndian;
     }
     
-    public int byteToWordConversion(byte[] bytes) {
+    /**
+     * Parses bytes as an integer and returns it.
+     * 
+     * @param bytes the bytes to be parsed
+     * @return the parsed bytes as an integer
+     */
+    public int byteToIntegerConversion(byte[] bytes) {
         int word = bytes[0];
         for (int i = 1; i < bytesPerWord; i++) {
             word = (word << 8) | (bytes[i] & 0xff);
@@ -97,7 +111,7 @@ public class ByteConverter {
                     k++;
                 }
             }
-            this.words.add(byteToWordConversion(toBeConverted));
+            this.words.add(byteToIntegerConversion(toBeConverted));
         }
     }
     
@@ -124,7 +138,7 @@ public class ByteConverter {
     /**
      * Get the words that are composed from the converted bytes.
      * 
-     * @return 
+     * @return a DynamicArray of integers
      */
     public DynamicArray<Integer> getWords() {
         return words;
@@ -133,7 +147,7 @@ public class ByteConverter {
     /**
      * Set the DynamicArray containing the words to convert to bytes.
      * 
-     * @param words 
+     * @param words a DynamicArray of integers
      */
     public void setWords(DynamicArray<Integer> words) {
         this.words = words;
@@ -142,6 +156,7 @@ public class ByteConverter {
     private byte[] wordToBytes(Integer word) {
         byte[] wordInBytes = new byte[bytesPerWord];
         int max = 0xFFFFFFFF;
+        // this branch works incorrectly
         if (bigEndian) {
             for (int i = 0; i < bytesPerWord; i++) {
                 wordInBytes[i] = (byte)((word >> (8 * i)) & max);

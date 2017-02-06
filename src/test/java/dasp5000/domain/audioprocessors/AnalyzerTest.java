@@ -5,7 +5,6 @@
  */
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.AudioAnalysis;
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
 import dasp5000.domain.audiocontainers.MonoAudio;
@@ -25,6 +24,7 @@ public class AnalyzerTest {
     private DynamicArray<Integer> data;
     private DynamicArray<Integer> single;
     private AudioContainer audioContainer;
+    private DynamicArray<Integer>[] channels;
     
     public AnalyzerTest() {
     }
@@ -49,6 +49,7 @@ public class AnalyzerTest {
         this.single = new DynamicArray<>(Integer.class);
         this.single.add(0);
         this.audioContainer = new MonoAudio(new AudioFormat(44100, 16, 1, true, false));
+        this.channels = new DynamicArray[1];
     }
     
     @After
@@ -62,63 +63,72 @@ public class AnalyzerTest {
     
     @Test
     public void thePeakValueIsMinimumForEmptyParameter() {
-        this.audioContainer.setAudioData(new DynamicArray<Integer>(Integer.class));
+        channels[0] = new DynamicArray<>(Integer.class);
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(this.audioContainer.getAudioAnalysis().getPeakSampleValue(), Integer.MIN_VALUE);
     }
     
     @Test
     public void theMinimumValueIsMaximumForEmptyParameter() {
-        this.audioContainer.setAudioData(new DynamicArray<Integer>(Integer.class));
+        channels[0] = new DynamicArray<>(Integer.class);
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(audioContainer.getAudioAnalysis().getMinimumSampleValue(), Integer.MAX_VALUE);
     }
     
     @Test
     public void theSamplesValueIsZeroForEmptyParameter() {
-        this.audioContainer.setAudioData(new DynamicArray<Integer>(Integer.class));
+        channels[0] = new DynamicArray<>(Integer.class);
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(audioContainer.getAudioAnalysis().getSamples(), 0);
     }
     
     @Test
     public void thePeakValueIsSetProperlyForPopulatedArray() {
-        this.audioContainer.setAudioData(data);
+        channels[0] = data;
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(this.audioContainer.getAudioAnalysis().getPeakSampleValue(), 1000);
     }
     
     @Test
     public void theMinimumValueIsSetProperlyForPopulatedArray() {
-        this.audioContainer.setAudioData(data);
+        channels[0] = data;
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(audioContainer.getAudioAnalysis().getMinimumSampleValue(), 3);
     }
     
     @Test
     public void theSamplesValueIsProperlySetForPopulatedArray() {
-        this.audioContainer.setAudioData(data);
+        channels[0] = data;
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(audioContainer.getAudioAnalysis().getSamples(), 6);
     }
     
     @Test
     public void thePeakValueIsSetProperlyForSingleValueArray() {
-        this.audioContainer.setAudioData(single);
+        channels[0] = single;
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(audioContainer.getAudioAnalysis().getPeakSampleValue(), 0);
     }
     
     @Test
     public void theMinimumValueIsSetProperlyForSingleValueArray() {
-        this.audioContainer.setAudioData(single);
+        channels[0] = single;
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(audioContainer.getAudioAnalysis().getMinimumSampleValue(), 0);
     }
     
     @Test
     public void theSamplesValueIsProperlySetForSingleValueArray() {
-        this.audioContainer.setAudioData(single);
+        channels[0] = single;
+        this.audioContainer.setChannels(channels);
         Analyzer.analyse(this.audioContainer);
         assertEquals(audioContainer.getAudioAnalysis().getSamples(), 1);
     }

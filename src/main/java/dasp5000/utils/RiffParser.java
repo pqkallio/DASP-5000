@@ -34,14 +34,29 @@ public class RiffParser {
     
     private static final String TARGET_CHUNK_ID = "RIFF";
     private static final String TARGET_FORMAT = "WAVE";
-    private AudioHeader header;
+    private final AudioHeader header;
     private DynamicArray<Integer>[] channels;
 
+    /**
+     * Creates a new RiffParser object and parses the data of the RIFF WAVE 
+     * (.wav-file) given as parameter.
+     * 
+     * @param file the file to be parsed
+     * @throws IOException if file cannot be opened
+     * @throws UnsupportedAudioFileException if the file is not parsable
+     */
     public RiffParser(File file) throws IOException, UnsupportedAudioFileException {
         this.header = new AudioHeader();
         parseFile(file);
     }
     
+    /**
+     * Parses the data of the RIFF WAVE (.wav-file) given as parameter.
+     * 
+     * @param file the file to be parsed
+     * @throws IOException if the file cannot be opened
+     * @throws UnsupportedAudioFileException if the file is not parsable
+     */
     public void parseFile(File file) throws IOException, UnsupportedAudioFileException {
         FileInputStream fis = new FileInputStream(file);
         byte[] bytes = new byte[44];
@@ -139,6 +154,7 @@ public class RiffParser {
         }
     }
 
+    // parsing data doesnät work properly
     private void parseData(byte[] data) {
         this.channels = initializeArrays();
         int bytesPerSample = header.getBitsPerSample() / 8;
@@ -163,10 +179,24 @@ public class RiffParser {
         return array;
     }
 
+    /**
+     * Get the audio data parsed from the file. The returned array contains
+     * each audio channel's samples as a DynamicArray. The audio samples are
+     * integers.
+     * 
+     * @return an array of DynamicArrays consisting of the audio samples of the
+     * audio channels in the file
+     */
     public DynamicArray<Integer>[] getChannels() {
         return channels;
     }
 
+    /**
+     * Get the header data parsed from the file.
+     * 
+     * @return AudioHeader object containing information parsed from the file
+     * 
+     */
     public AudioHeader getHeader() {
         return header;
     }

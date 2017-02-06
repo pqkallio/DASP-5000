@@ -2,6 +2,8 @@
 package dasp5000.domain;
 
 /**
+ * An enumerator that remembers a RIFF WAVE file's header fields' offset, 
+ * byte length and endianness.
  *
  * @author Petri Kallio
  */
@@ -31,14 +33,32 @@ public enum WaveHeaderFields {
         this.bigEndian = bigEndian;
     }
 
+    /**
+     * Get the length of the field in bytes.
+     * Note! If the length to obtain is WaveHeaderFields.DATA, the length of the 
+     * field is dynamic and must be parsed from WaveHeaderFields.SUBCHUNK_2_SIZE 
+     * field's data.
+     * 
+     * @return the length of the field in bytes
+     */
     public int getByteCount() {
         return byteCount;
     }
 
+    /**
+     * The byte count from which the field's data begins in the file.
+     * 
+     * @return byte offset
+     */
     public int getOffset() {
         return offset;
     }
 
+    /**
+     * Get the endianness of the field's data's encoding.
+     * 
+     * @return true if big-endian, false if little-endian
+     */
     public boolean isBigEndian() {
         return bigEndian;
     }

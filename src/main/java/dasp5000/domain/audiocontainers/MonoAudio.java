@@ -30,7 +30,7 @@ public class MonoAudio implements AudioContainer {
      * Sets the AudioAnalysis object that contains important data used in 
      * processing the audio data.
      * 
-     * @param audioAnalysis 
+     * @param audioAnalysis AudioAnalysis object
      */
     @Override
     public void setAudioAnalysis(AudioAnalysis audioAnalysis) {
@@ -44,14 +44,14 @@ public class MonoAudio implements AudioContainer {
      * @param audioData Contains bytes combined as words
      */
     @Override
-    public void setAudioData(DynamicArray<Integer>... audioData) {
+    public void setChannels(DynamicArray<Integer>[] audioData) {
         this.audioData[0] = audioData[0];
     }
     
     /**
      * Get the number of channels of the audio data.
      * 
-     * @return 
+     * @return the number of channels
      */
     @Override
     public int getNumberOfChannels() {
@@ -59,10 +59,9 @@ public class MonoAudio implements AudioContainer {
     }
     
     /**
-     * Get the bit depth of the audio, meaning the amount of bits used to 
-     * represent one audio sample.
+     * Get the amount of bits used to record one audio sample.
      * 
-     * @return 
+     * @return the amount of bits per sample
      */
     @Override
     public int getBitsPerAudioSample() {
@@ -70,9 +69,9 @@ public class MonoAudio implements AudioContainer {
     }
     
     /**
-     * Get the sample rate of the audio (e.g. 44.1 kHz or 44100 samples per second.
+     * Get the sample rate of the audio (e.g. 44.1 kHz or 44100 samples per second.)
      * 
-     * @return 
+     * @return the sample rate
      */
     @Override
     public float getSampleRate() {
@@ -80,10 +79,9 @@ public class MonoAudio implements AudioContainer {
     }
     
     /**
-     * Returns true if the audio samples are stored in big-endian form and false
-     * if they are stored in little-endian form.
+     * Returns the endianness of the audio samples.
      * 
-     * @return 
+     * @return true if big-endian, false if little-endian
      */
     @Override
     public boolean isBigEndian() {
@@ -91,15 +89,22 @@ public class MonoAudio implements AudioContainer {
     }
 
     /**
-     * Returns the DynamicArray object used to store the audio's bytes as words.
+     * Returns the DynamicArray object used to store the left channel's audio as 
+     * integers.
      * 
-     * @return 
+     * @return a DynamicArray of integers
      */
     @Override
     public DynamicArray<Integer> getLeftChannel() {
         return audioData[0];
     }
     
+    /**
+     * Returns the DynamicArray object used to store the right channel's audio as 
+     * integers.
+     * 
+     * @return a DynamicArray of integers
+     */
     @Override
     public DynamicArray<Integer> getRightChannel() {
         return audioData[0];
@@ -108,7 +113,7 @@ public class MonoAudio implements AudioContainer {
     /**
      * Get the audio-specific analysis data as AudioAnalysis object.
      * 
-     * @return 
+     * @return AudioAnalysis object
      */
     @Override
     public AudioAnalysis getAudioAnalysis() {
@@ -116,27 +121,43 @@ public class MonoAudio implements AudioContainer {
     }
 
     /**
-     * Get the AudioFormat object.
+     * Get the AudioFormat object that contains administrational information 
+     * about the audio.
      * 
-     * @return 
+     * @return AudioFormat object
      */
     @Override
     public AudioFormat getAudioFormat() {
         return audioFormat;
     }
 
+    /**
+     * Set the left audio channel's data.
+     * 
+     * @param audioData a DynamicArray of integers
+     */
     @Override
     public void setLeftChannel(DynamicArray<Integer> audioData) {
         this.audioData[0] = audioData;
     }
 
+    /**
+     * Set the right audio channel's data.
+     * 
+     * @param audioData a DynamicArray of integers
+     */
     @Override
     public void setRightChannel(DynamicArray<Integer> audioData) {
         this.audioData[0] = audioData;
     }
 
+    /**
+     * Get all the audio data stored with the AudioContainer.
+     * 
+     * @return an array of DynamicArrays
+     */
     @Override
-    public DynamicArray<Integer>[] getData() {
+    public DynamicArray<Integer>[] getChannels() {
         return audioData;
     }
     

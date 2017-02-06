@@ -1,8 +1,8 @@
 
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
+import dasp5000.domain.audiocontainers.AudioContainer;
 
 /**
  * An audio processing class that reverses the audio data.
@@ -10,9 +10,15 @@ import dasp5000.domain.DynamicArray;
  * @author Petri Kallio
  */
 public class Reverser implements AudioProcessor {
-    private final MonoAudio audioContainer;
+    private final AudioContainer audioContainer;
 
-    public Reverser(MonoAudio audioContainer) {
+    /**
+     * Creates a new Reverser object.
+     * 
+     * @param audioContainer the AudioContainer object which audio is to be 
+     * reversed.
+     */
+    public Reverser(AudioContainer audioContainer) {
         this.audioContainer = audioContainer;
     }
     

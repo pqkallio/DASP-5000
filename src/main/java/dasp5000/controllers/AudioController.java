@@ -2,6 +2,7 @@
 package dasp5000.controllers;
 
 import dasp5000.domain.AudioAnalysis;
+import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
 import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.audioprocessors.Analyzer;
@@ -26,10 +27,13 @@ public class AudioController {
     private final AudioContainer audioContainer;
 
     /**
-     * Constructs a new AudioController object.
+     * Constructs a new AudioController object. The file of the parameter 
+     * fileName is first opened and then an AudioContainer object is parsed from
+     * the data of the opened audio file
+     * 
      * @param fileName The name of the audio file to be opened
-     * @throws UnsupportedAudioFileException
-     * @throws IOException 
+     * @throws UnsupportedAudioFileException if the file format is not supported
+     * @throws IOException if the file can not be opened
      */
     public AudioController(String fileName) 
             throws UnsupportedAudioFileException, IOException {
@@ -41,7 +45,14 @@ public class AudioController {
         Analyzer.analyse(this.audioContainer);
     }
     
-    public AudioController(MonoAudio audioContainer) {
+    /**
+     * Create a new AudioController object. The parameter is a pre-existing 
+     * AudioContainer object.
+     * 
+     * @param audioContainer the AudioContainer object to be controlled by this
+     * controller
+     */
+    public AudioController(AudioContainer audioContainer) {
         this.audioContainer = audioContainer;
         this.fileName = null;
         if (this.audioContainer.getAudioAnalysis() == null) {
@@ -67,7 +78,7 @@ public class AudioController {
 
     private void processAudioBytes(AudioContainer audioContainer, 
             AudioInputStream audioInputStream) {
-        ByteConverter[] converters 
+        ByteConverter[] converters
                 = createConverters(audioContainer);
         
         int numBytes = 1024;
@@ -75,14 +86,24 @@ public class AudioController {
         try {
             int numBytesRead = 0;
             while ((numBytesRead = audioInputStream.read(audioBytes)) != -1) {
-//                converter.insertBytesToWordArray(audioBytes, numBytesRead);
+                converters[0].insertBytesToWordArray(audioBytes, numBytesRead);
             }
         } catch (IOException ex) {
             System.out.println(ex.toString());
         }
-//        audioContainer.setAudioData(converter.getWords());
+        DynamicArray<Integer>[] channels = new DynamicArray[1];
+        channels[0] = converters[0].getWords();
+        audioContainer.setChannels(channels);
     }
     
+    /**
+     * Write the data of the AudioContainer object into a audio file. The file's 
+     * name into which the data is to be written is given as parameter.
+     * 
+     * @param outputFilePath the new audio file's path
+     * @throws UnsupportedAudioFileException if the AudioContainer's data is invalid
+     * @throws IOException if the file cannot be created
+     */
     public void writeToFile(String outputFilePath) 
             throws UnsupportedAudioFileException, IOException {
         ByteConverter converter 
@@ -103,6 +124,12 @@ public class AudioController {
         AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputFile);
     } 
 
+    /**
+     * Get the AudioContainer object that corresponds to the particular 
+     * AudioController object.
+     * 
+     * @return AudioContainer object
+     */
     public AudioContainer getAudioContainer() {
         return audioContainer;
     }

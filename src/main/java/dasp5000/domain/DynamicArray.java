@@ -27,7 +27,7 @@ public class DynamicArray<T> {
     /**
      * Adds the object given as parameter to the DynamicArray
      * 
-     * @param object 
+     * @param object the object to be added into the array
      */
     public void add(T object) {
         array[size] = object;
@@ -43,14 +43,20 @@ public class DynamicArray<T> {
     /**
      * Gets the object at the given index of the DynamicArray
      * 
-     * @param index
-     * @return 
+     * @param index the index of the object to retrieve
+     * @return the object that corresponds to the index given as parameter
      */
     public T get(int index) {
         checkIndex(index);
         return array[index];
     }
     
+    /**
+     * Replaces the object at the given index of the DynamicArray
+     * 
+     * @param index the index of the object to be replaced
+     * @param value the object to be replaced
+     */
     public void replace(int index, T value) {
         checkIndex(index);
         array[index] = value;
@@ -59,7 +65,7 @@ public class DynamicArray<T> {
     /**
      * Returns the current amount of objects in the DynamicArray
      * 
-     * @return 
+     * @return the size of the array
      */
     public int size() {
         return size;

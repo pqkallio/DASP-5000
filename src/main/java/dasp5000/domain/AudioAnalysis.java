@@ -28,17 +28,18 @@ public class AudioAnalysis {
     }
 
     /**
-     * Returns the minimum sample value.
+     * Returns the minimum sample value of the analysed audio.
      * 
-     * @return 
+     * @return the minimum sample value
      */
     public int getMinimumSampleValue() {
         return minimumSampleValue;
     }
 
     /**
-     * Returns the peak (i.e. maximum) sample value.
-     * @return 
+     * Returns the peak (i.e. maximum) sample value of the analysed audio.
+     * 
+     * @return the peak sample value
      */
     public int getPeakSampleValue() {
         return peakSampleValue;
@@ -47,7 +48,7 @@ public class AudioAnalysis {
     /**
      * Returns the amount of samples in audio data.
      * 
-     * @return 
+     * @return the amount of samples
      */
     public long getSamples() {
         return samples;

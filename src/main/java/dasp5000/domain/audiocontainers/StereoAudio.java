@@ -30,7 +30,7 @@ public class StereoAudio implements AudioContainer {
      * Sets the AudioAnalysis object that contains important data used in 
      * processing the audio data.
      * 
-     * @param audioAnalysis 
+     * @param audioAnalysis AudioAnalysis object
      */
     @Override
     public void setAudioAnalysis(AudioAnalysis audioAnalysis) {
@@ -38,13 +38,13 @@ public class StereoAudio implements AudioContainer {
     }
 
     /**
-     * Sets the DynamicArray that contains all the words that are composed of
-     * a AudioInputStream's bytes based on its bit depth (e.g. 16 bits per sample).
+     * Sets the array of DynamicArrays that contains all the channels of the 
+     * audio.
      * 
-     * @param audioData Contains bytes combined as words
+     * @param audioData an array of DynamicArrays of integers
      */
     @Override
-    public void setAudioData(DynamicArray<Integer>... audioData) {
+    public void setChannels(DynamicArray<Integer>[] audioData) {
         this.audioData[0] = audioData[0];
         this.audioData[1] = audioData[1];
     }
@@ -52,7 +52,7 @@ public class StereoAudio implements AudioContainer {
     /**
      * Get the number of channels of the audio data.
      * 
-     * @return 
+     * @return the number of channels
      */
     @Override
     public int getNumberOfChannels() {
@@ -60,10 +60,9 @@ public class StereoAudio implements AudioContainer {
     }
     
     /**
-     * Get the bit depth of the audio, meaning the amount of bits used to 
-     * represent one audio sample.
+     * Get the amount of bits used to record one audio sample.
      * 
-     * @return 
+     * @return the number of bits per sample
      */
     @Override
     public int getBitsPerAudioSample() {
@@ -71,9 +70,9 @@ public class StereoAudio implements AudioContainer {
     }
     
     /**
-     * Get the sample rate of the audio (e.g. 44.1 kHz or 44100 samples per second.
+     * Get the sample rate of the audio (e.g. 44.1 kHz or 44100 samples per second.)
      * 
-     * @return 
+     * @return the sample rate
      */
     @Override
     public float getSampleRate() {
@@ -81,10 +80,9 @@ public class StereoAudio implements AudioContainer {
     }
     
     /**
-     * Returns true if the audio samples are stored in big-endian form and false
-     * if they are stored in little-endian form.
+     * Returns the endiannes of the audio data.
      * 
-     * @return 
+     * @return true if big-endian, false if little-endian
      */
     @Override
     public boolean isBigEndian() {
@@ -92,15 +90,22 @@ public class StereoAudio implements AudioContainer {
     }
 
     /**
-     * Returns the DynamicArray object used to store the audio's bytes as words.
+     * Returns the DynamicArray object used to store the audio's left channel's 
+     * data.
      * 
-     * @return 
+     * @return a DynamicArray of integers
      */
     @Override
     public DynamicArray<Integer> getLeftChannel() {
         return audioData[0];
     }
     
+    /**
+     * Returns the DynamicArray object used to store the audio's right channel's 
+     * data.
+     * 
+     * @return a DynamicArray of integers
+     */
     @Override
     public DynamicArray<Integer> getRightChannel() {
         return audioData[1];
@@ -109,7 +114,7 @@ public class StereoAudio implements AudioContainer {
     /**
      * Get the audio-specific analysis data as AudioAnalysis object.
      * 
-     * @return 
+     * @return AudioAnalysis object
      */
     @Override
     public AudioAnalysis getAudioAnalysis() {
@@ -117,27 +122,45 @@ public class StereoAudio implements AudioContainer {
     }
 
     /**
-     * Get the AudioFormat object.
+     * Get the AudioFormat object used to store administrative information about 
+     * the audio.
      * 
-     * @return 
+     * @return AudioFormat object
      */
     @Override
     public AudioFormat getAudioFormat() {
         return audioFormat;
     }
 
+    /**
+     * Sets the DynamicArray object used to store the audio's left channel's 
+     * data.
+     * 
+     * @param audioData a DynamicArray of integers
+     */
     @Override
     public void setLeftChannel(DynamicArray<Integer> audioData) {
         this.audioData[0] = audioData;
     }
 
+    /**
+     * Sets the DynamicArray object used to store the audio's right channel's 
+     * data.
+     * 
+     * @param audioData a DynamicArray of integers
+     */
     @Override
     public void setRightChannel(DynamicArray<Integer> audioData) {
         this.audioData[1] = audioData;
     }
 
+    /**
+     * Get the audio data as an array of DynamicArrays of integers
+     * 
+     * @return an array of DynamicArrays of integers
+     */
     @Override
-    public DynamicArray<Integer>[] getData() {
+    public DynamicArray<Integer>[] getChannels() {
         return this.audioData;
     }
     

@@ -1,9 +1,8 @@
 
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.AudioAnalysis;
-import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
+import dasp5000.domain.audiocontainers.AudioContainer;
 import dasp5000.utils.DecibelConverter;
 
 
@@ -13,7 +12,7 @@ import dasp5000.utils.DecibelConverter;
  * @author Petri Kallio
  */
 public class Normalizer implements AudioProcessor {
-    private final MonoAudio audioContainer;
+    private final AudioContainer audioContainer;
     private double dBFSMaxLevel;
     
     /**
@@ -22,11 +21,16 @@ public class Normalizer implements AudioProcessor {
      * @param audioContainer The AudioContainer that contains the data to process.
      * @param dBFSMaxLevel The desired maximum level of audio in dBFS scale.
      */
-    public Normalizer(MonoAudio audioContainer, double dBFSMaxLevel) {
+    public Normalizer(AudioContainer audioContainer, double dBFSMaxLevel) {
         this.audioContainer = audioContainer;
         this.dBFSMaxLevel = dBFSMaxLevel;
     }
     
+    /**
+     * Processes the audio data by setting the peak sample's value as the 
+     * dBFSMaxLevel given as a constructor parameter and justifies the 
+     * other samples in relation to the new maximum level.
+     */
     @Override
     public void process() {
         double expansionMultiplier = calculateExpansionMultiplier();
@@ -48,6 +52,11 @@ public class Normalizer implements AudioProcessor {
         return 1.0 * dBFSMaxInSampleValue / currentPeakSampleValue;
     }
 
+    /**
+     * Set the maximum level of the audio data.
+     * 
+     * @param dBFSMaxLevel the maximum level of the audio data.
+     */
     public void setdBFSMaxLevel(double dBFSMaxLevel) {
         this.dBFSMaxLevel = dBFSMaxLevel;
     }
