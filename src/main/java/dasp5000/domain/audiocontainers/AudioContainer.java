@@ -2,106 +2,169 @@
 package dasp5000.domain.audiocontainers;
 
 import dasp5000.domain.AudioAnalysis;
+import dasp5000.domain.AudioHeader;
 import dasp5000.domain.DynamicArray;
 import javax.sound.sampled.AudioFormat;
 
 /**
- * An interface that all the classes that store information about audio must
- * implement.
+ * An object to handle audio data.
  *
  * @author Petri Kallio
  */
-public interface AudioContainer {
+public class AudioContainer {
+    private AudioAnalysis audioAnalysis;
+    private final DynamicArray<Integer>[] audioData;
+    private final AudioFormat audioFormat;
+    private AudioHeader audioHeader;
+
     /**
-     * Set the AudioAnalysis object of the AudioContainer object
+     * Creates a new AudioContainer object.
+     * 
+     * @param audioFormat The AudioFormat object of the corresponding AudioInputStream.
+     */
+    public AudioContainer(AudioFormat audioFormat) {
+        this.audioFormat = audioFormat;
+        this.audioData = new DynamicArray[1];
+        this.audioHeader = null;
+    }
+    
+    /**
+     * Sets the AudioAnalysis object that contains important data used in 
+     * processing the audio data.
      * 
      * @param audioAnalysis AudioAnalysis object
      */
-    public void setAudioAnalysis(AudioAnalysis audioAnalysis);
-    
+    public void setAudioAnalysis(AudioAnalysis audioAnalysis) {
+        this.audioAnalysis = audioAnalysis;
+    }
+
     /**
-     * Set the AudioContainer object's audio channel data by passing an array 
-     * of DynamicArrays.
+     * Sets the DynamicArray that contains all the words that are composed of
+     * a AudioInputStream's bytes based on its bit depth (e.g. 16 bits per sample).
      * 
-     * @param channels DynamicArrays containing the Audio .
+     * @param audioData Contains bytes combined as words
      */
-    public void setChannels(DynamicArray<Integer>[] channels);
+    public void setChannels(DynamicArray<Integer>[] audioData) {
+        this.audioData[0] = audioData[0];
+    }
     
     /**
-     * Get the number of channels of the AudioContainer
+     * Get the number of channels of the audio data.
      * 
      * @return the number of channels
      */
-    public int getNumberOfChannels();
+    public int getNumberOfChannels() {
+        return this.audioFormat.getChannels();
+    }
     
     /**
-     * Get the amount of bits used to store a single audio sample.
+     * Get the amount of bits used to record one audio sample.
      * 
-     * @return the number of bits per audio sample
+     * @return the amount of bits per sample
      */
-    public int getBitsPerAudioSample();
+    public int getBitsPerAudioSample() {
+        return this.audioFormat.getSampleSizeInBits();
+    }
     
     /**
-     * Get the amount of samples stored to record one second of audio.
+     * Get the sample rate of the audio (e.g. 44.1 kHz or 44100 samples per second.)
      * 
      * @return the sample rate
      */
-    public float getSampleRate();
+    public float getSampleRate() {
+        return this.audioFormat.getSampleRate();
+    }
     
     /**
-     * Get the endianness of the audio data.
+     * Returns the endianness of the audio samples.
      * 
      * @return true if big-endian, false if little-endian
      */
-    public boolean isBigEndian();
+    public boolean isBigEndian() {
+        return this.audioFormat.isBigEndian();
+    }
+
+    /**
+     * Returns the DynamicArray object used to store the left channel's audio as 
+     * integers.
+     * 
+     * @return a DynamicArray of integers
+     */
+    public DynamicArray<Integer> getLeftChannel() {
+        return audioData[0];
+    }
     
     /**
-     * Get the audio's AudioAnalysis object
+     * Returns the DynamicArray object used to store the right channel's audio as 
+     * integers.
+     * 
+     * @return a DynamicArray of integers
+     */
+    public DynamicArray<Integer> getRightChannel() {
+        return audioData[0];
+    }
+    
+    /**
+     * Get the audio-specific analysis data as AudioAnalysis object.
      * 
      * @return AudioAnalysis object
      */
-    public AudioAnalysis getAudioAnalysis();
-    
+    public AudioAnalysis getAudioAnalysis() {
+        return audioAnalysis;
+    }
+
     /**
-     * Get the audio's AudioFormat object.
+     * Get the AudioFormat object that contains administrational information 
+     * about the audio.
      * 
      * @return AudioFormat object
      */
-    public AudioFormat getAudioFormat();
-    
+    public AudioFormat getAudioFormat() {
+        return audioFormat;
+    }
+
     /**
-     * Set the left channel's data.
+     * Set the left audio channel's data.
      * 
-     * @param audioData the audio samples as a DynamicArray
+     * @param audioData a DynamicArray of integers
      */
-    public void setLeftChannel(DynamicArray<Integer> audioData);
-    
+    public void setLeftChannel(DynamicArray<Integer> audioData) {
+        this.audioData[0] = audioData;
+    }
+
     /**
-     * Set the right channel's data.
+     * Set the right audio channel's data.
      * 
-     * @param audioData the audio samples as a DynamicArray
+     * @param audioData a DynamicArray of integers
      */
-    public void setRightChannel(DynamicArray<Integer> audioData);
-    
+    public void setRightChannel(DynamicArray<Integer> audioData) {
+        this.audioData[0] = audioData;
+    }
+
     /**
-     * Get the left channel's data.
-     * 
-     * @return a Dynamic Array of samples
-     */
-    public DynamicArray<Integer> getLeftChannel();
-    
-    /**
-     * Get the right channel's data.
-     * 
-     * @return a Dynamic Array of samples
-     */
-    public DynamicArray<Integer> getRightChannel();
-    
-    /**
-     * Get the AudioContainer's audio channel's samples as an array of 
-     * DynamicArrays.
+     * Get all the audio data stored with the AudioContainer.
      * 
      * @return an array of DynamicArrays
      */
-    public DynamicArray<Integer>[] getChannels();
+    public DynamicArray<Integer>[] getChannels() {
+        return audioData;
+    }
+    
+    /**
+     * Returns AudioHeader object
+     * 
+     * @return AudioHeader object
+     */
+    public AudioHeader getAudioHeader() {
+        return audioHeader;
+    }
+
+    /**
+     * Set AudioHeader object
+     * 
+     * @param audioHeader AudioHeader object
+     */
+    public void setAudioHeader(AudioHeader audioHeader) {
+        this.audioHeader = audioHeader;
+    }
 }

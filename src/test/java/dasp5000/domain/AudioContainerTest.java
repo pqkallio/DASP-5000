@@ -5,7 +5,7 @@
  */
 package dasp5000.domain;
 
-import dasp5000.domain.audiocontainers.MonoAudio;
+import dasp5000.domain.audiocontainers.AudioContainer;
 import javax.sound.sampled.AudioFormat;
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @author pqkallio
  */
 public class AudioContainerTest {
-    private MonoAudio audioContainer;
+    private AudioContainer audioContainer;
     private AudioFormat audioFormat;
     private AudioAnalysis audioAnalysis;
     private DynamicArray<Integer> words;
@@ -28,7 +28,7 @@ public class AudioContainerTest {
     @Before
     public void setUp() {
         this.audioFormat = new AudioFormat(44100, 16, 2, true, false);
-        this.audioContainer = new MonoAudio(audioFormat);
+        this.audioContainer = new AudioContainer(audioFormat);
         this.audioAnalysis = new AudioAnalysis(1, 2, 3);
         this.words = new DynamicArray<>(Integer.class);
     }

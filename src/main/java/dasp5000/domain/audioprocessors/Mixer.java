@@ -1,7 +1,6 @@
 
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
 import javax.sound.sampled.AudioFormat;
@@ -44,7 +43,7 @@ public class Mixer implements AudioProcessor {
         }
         AudioFormat audioFormat 
                 = copyAudioFormatProperties(audioContainers[0].getAudioFormat());
-        this.mix = new MonoAudio(audioFormat);
+        this.mix = new AudioContainer(audioFormat);
     }
 
     /**

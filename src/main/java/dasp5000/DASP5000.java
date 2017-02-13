@@ -3,7 +3,6 @@ package dasp5000;
 
 import dasp5000.controllers.AudioController;
 import dasp5000.domain.DynamicArray;
-import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.audioprocessors.Mixer;
 import dasp5000.domain.audioprocessors.Normalizer;
 import dasp5000.domain.audioprocessors.PhaseSwitcher;

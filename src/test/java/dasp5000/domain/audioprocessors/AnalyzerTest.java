@@ -7,7 +7,6 @@ package dasp5000.domain.audioprocessors;
 
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
-import dasp5000.domain.audiocontainers.MonoAudio;
 import javax.sound.sampled.AudioFormat;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -48,7 +47,7 @@ public class AnalyzerTest {
         this.data.add(10);
         this.single = new DynamicArray<>(Integer.class);
         this.single.add(0);
-        this.audioContainer = new MonoAudio(new AudioFormat(44100, 16, 1, true, false));
+        this.audioContainer = new AudioContainer(new AudioFormat(44100, 16, 1, true, false));
         this.channels = new DynamicArray[1];
     }
     

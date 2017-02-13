@@ -33,6 +33,21 @@ public class ByteConverter {
         }
     }
     
+    public static void intToByteConversion(byte[] buffer, int value, int bytesN, 
+            boolean bigEndian) {
+        int max = 0xFFFFFFFF;
+        // this branch works incorrectly
+        if (bigEndian) {
+            for (int i = 0; i < bytesN; i++) {
+                buffer[i] = (byte)((value >> (8 * i)) & max);
+            }
+        } else {
+            for (int i = bytesN - 1; i > -1; i--) {
+                buffer[i] = (byte)((value >> (8 * i)) & max);
+            }
+        }
+    }
+    
     private static int parseBigEndian(byte[] bytes, int bytesN) {
         int value = bytes[0];
         if (bytesN > 1) {

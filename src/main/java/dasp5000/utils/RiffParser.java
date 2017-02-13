@@ -154,7 +154,7 @@ public class RiffParser {
         }
     }
 
-    // parsing data doesnät work properly
+    // parsing data doesn't work properly
     private void parseData(byte[] data) {
         this.channels = initializeArrays();
         int bytesPerSample = header.getBitsPerSample() / 8;

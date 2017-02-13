@@ -4,7 +4,6 @@ package dasp5000.controllers;
 import dasp5000.domain.AudioAnalysis;
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
-import dasp5000.domain.audiocontainers.MonoAudio;
 import dasp5000.domain.audioprocessors.Analyzer;
 import dasp5000.domain.streamhandlers.AudioFileHandler;
 import dasp5000.utils.ByteConverter;
@@ -40,7 +39,7 @@ public class AudioController {
         this.fileName = fileName;
         AudioInputStream audioInputStream = openAudioInputStream(this.fileName);
         
-        this.audioContainer = new MonoAudio(audioInputStream.getFormat());
+        this.audioContainer = new AudioContainer(audioInputStream.getFormat());
         processAudioBytes(this.audioContainer, audioInputStream);
         Analyzer.analyse(this.audioContainer);
     }
