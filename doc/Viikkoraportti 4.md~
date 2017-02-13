@@ -2,7 +2,7 @@
 
 Käytetty noin 5 tuntia.
 
-Neljännellä viikolla aikaa oli hyvin rajoitetusti, joten itse ohjelma ei hirveästi edennyt. Otan menetetyn ajan sitten tällä viikolla kiinni. Aloin toteuttamaan RiffBuilder-luokkaa, jonka avulla AudioContainer-olio saadaan muunnettua tavutaulukoksi, joka on RIFF WAVE audiotiedostostandardin mukainen. Lisäksi refaktoroin koodia.
+Neljännellä viikolla aikaa oli hyvin rajoitetusti, joten itse ohjelma ei hirveästi edennyt. Otan menetetyn ajan sitten tällä viikolla kiinni. Aloin toteuttamaan RiffBuilder-luokkaa, jonka avulla AudioContainer-olio saadaan muunnettua tavutaulukoksi, joka on RIFF WAVE audiotiedostostandardin mukainen. Lisäksi refaktoroin koodia. Tein myös vertaisarvioinnin.
 
 Suurimmat edistysaskeleet tällä viikolla:
 - testausdokumentin aloittaminen
