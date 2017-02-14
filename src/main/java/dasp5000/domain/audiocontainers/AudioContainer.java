@@ -4,7 +4,6 @@ package dasp5000.domain.audiocontainers;
 import dasp5000.domain.AudioAnalysis;
 import dasp5000.domain.AudioHeader;
 import dasp5000.domain.DynamicArray;
-import javax.sound.sampled.AudioFormat;
 
 /**
  * An object to handle audio data.
@@ -14,23 +13,17 @@ import javax.sound.sampled.AudioFormat;
 public class AudioContainer {
     private AudioAnalysis audioAnalysis;
     private DynamicArray<Integer>[] audioData;
-//    private final AudioFormat audioFormat;
     private AudioHeader audioHeader;
 
-    /**
-     * Creates a new AudioContainer object.
-     * 
-     * @param audioFormat The AudioFormat object of the corresponding AudioInputStream.
-     */
-    public AudioContainer(AudioFormat audioFormat) {
-//        this.audioFormat = audioFormat;
-        this.audioData = null;
-        this.audioHeader = null;
-    }
-
     public AudioContainer() {
-        this.audioData = null;
-//        this.audioFormat = null;
+        this(null);
+    }
+    
+    public AudioContainer(AudioHeader header) {
+        if (header != null) {
+            this.audioData = new DynamicArray[header.getNumberOfChannels()];
+        }
+        this.audioHeader = header;
     }
     
     /**
@@ -79,15 +72,6 @@ public class AudioContainer {
     public int getSampleRate() {
         return this.audioHeader.getSampleRate();
     }
-    
-//    /**
-//     * Returns the endianness of the audio samples.
-//     * 
-//     * @return true if big-endian, false if little-endian
-//     */
-//    public boolean isBigEndian() {
-//        return this.audioHeader.isBigEndian();
-//    }
 
     /**
      * Returns the DynamicArray object used to store the left channel's audio as 
@@ -96,7 +80,10 @@ public class AudioContainer {
      * @return a DynamicArray of integers
      */
     public DynamicArray<Integer> getLeftChannel() {
-        return audioData[0];
+        if (checkAudioData(0)) {
+            return audioData[0];
+        }
+        return null;
     }
     
     /**
@@ -106,7 +93,10 @@ public class AudioContainer {
      * @return a DynamicArray of integers
      */
     public DynamicArray<Integer> getRightChannel() {
-        return audioData[0];
+        if (checkAudioData(1)) {
+            return audioData[1];
+        }
+        return null;
     }
     
     /**
@@ -124,7 +114,9 @@ public class AudioContainer {
      * @param audioData a DynamicArray of integers
      */
     public void setLeftChannel(DynamicArray<Integer> audioData) {
-        this.audioData[0] = audioData;
+        if (checkAudioData(0)) {
+            this.audioData[0] = audioData;
+        }
     }
 
     /**
@@ -133,7 +125,9 @@ public class AudioContainer {
      * @param audioData a DynamicArray of integers
      */
     public void setRightChannel(DynamicArray<Integer> audioData) {
-        this.audioData[0] = audioData;
+        if (checkAudioData(1)) {
+            this.audioData[1] = audioData;
+        }
     }
 
     /**
@@ -161,5 +155,28 @@ public class AudioContainer {
      */
     public void setAudioHeader(AudioHeader audioHeader) {
         this.audioHeader = audioHeader;
+        if (this.audioData == null) {
+            this.audioData = new DynamicArray[audioHeader.getNumberOfChannels()];
+        }
+    }
+    
+    /**
+     * Get the amount of samples per channel
+     * 
+     * @return samples per channel
+     */
+    public int getSamplesPerChannel() {
+        if (this.audioData == null || this.audioData.length == 0) {
+            return 0;
+        }
+        
+        return this.audioData[0].size();
+    }
+
+    private boolean checkAudioData(int i) {
+        if (this.audioData == null || this.audioData.length <= i) {
+            return false;
+        }
+        return true;
     }
 }

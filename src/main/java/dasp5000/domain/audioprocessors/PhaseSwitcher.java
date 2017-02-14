@@ -27,10 +27,13 @@ public class PhaseSwitcher implements AudioProcessor {
      */
     @Override
     public void process() {
-        DynamicArray<Integer> data = audioContainer.getLeftChannel();
-        for (int i = 0; i < data.size(); i++) {
-            int newValue = -1 * data.get(i);
-            data.replace(i, newValue);
+        DynamicArray<Integer>[] data = audioContainer.getChannels();
+        int samples = audioContainer.getSamplesPerChannel();
+        for (int j = 0; j < samples; j++) {
+            for (int i = 0; i < audioContainer.getNumberOfChannels(); i++) {
+                int newValue = -1 * data[i].get(j);
+                data[i].replace(j, newValue);
+            }
         }
     }
     

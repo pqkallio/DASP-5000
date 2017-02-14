@@ -34,10 +34,13 @@ public class Normalizer implements AudioProcessor {
     @Override
     public void process() {
         double expansionMultiplier = calculateExpansionMultiplier();
-        DynamicArray<Integer> data = audioContainer.getLeftChannel();
-        for (int i = 0; i < data.size(); i++) {
-            int newValue = (int)(data.get(i) * expansionMultiplier);
-            data.replace(i, newValue);
+        DynamicArray<Integer>[] data = audioContainer.getChannels();
+        int samples = audioContainer.getSamplesPerChannel();
+        for (int j = 0; j < samples; j++) {
+            for (int i = 0; i < audioContainer.getNumberOfChannels(); i++) {
+                int newValue = (int)(data[i].get(j) * expansionMultiplier);
+                data[i].replace(j, newValue);
+            }
         }
         Analyzer.analyse(audioContainer);
     }

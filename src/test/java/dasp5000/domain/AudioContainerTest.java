@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  */
 public class AudioContainerTest {
     private AudioContainer audioContainer;
-    private AudioFormat audioFormat;
+    private AudioHeader audioHeader;
     private AudioAnalysis audioAnalysis;
     private DynamicArray<Integer> words;
     
@@ -27,8 +27,8 @@ public class AudioContainerTest {
     
     @Before
     public void setUp() {
-        this.audioFormat = new AudioFormat(44100, 16, 2, true, false);
-        this.audioContainer = new AudioContainer(audioFormat);
+        this.audioHeader = new AudioHeader("WAVE", 2, 44100, 44100 * 4, 4, 16, 128);
+        this.audioContainer = new AudioContainer(audioHeader);
         this.audioAnalysis = new AudioAnalysis(1, 2, 3);
         this.words = new DynamicArray<>(Integer.class);
     }
@@ -39,7 +39,7 @@ public class AudioContainerTest {
 
     @Test
     public void audioFormatIsCorrectlySet() {
-        assertEquals(audioFormat, audioContainer.getAudioFormat());
+        assertEquals(audioHeader, audioContainer.getAudioHeader());
     }
     
     @Test
@@ -79,16 +79,6 @@ public class AudioContainerTest {
     @Test
     public void testGetSampleRate() {
         assertEquals(audioContainer.getSampleRate(), 44100.0, 0);
-    }
-
-    @Test
-    public void testIsBigEndian() {
-        assertFalse(audioContainer.isBigEndian());
-    }
-
-    @Test
-    public void testGetAudioFormat() {
-        assertEquals(audioContainer.getAudioFormat(), audioFormat);
     }
     
 }

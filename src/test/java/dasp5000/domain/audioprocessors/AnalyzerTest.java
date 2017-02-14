@@ -5,6 +5,7 @@
  */
 package dasp5000.domain.audioprocessors;
 
+import dasp5000.domain.AudioHeader;
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
 import javax.sound.sampled.AudioFormat;
@@ -47,7 +48,8 @@ public class AnalyzerTest {
         this.data.add(10);
         this.single = new DynamicArray<>(Integer.class);
         this.single.add(0);
-        this.audioContainer = new AudioContainer(new AudioFormat(44100, 16, 1, true, false));
+        AudioHeader header = new AudioHeader("WAVE", 2, 44100, 44100 * 4, 4, 16, 256);
+        this.audioContainer = new AudioContainer(header);
         this.channels = new DynamicArray[1];
     }
     

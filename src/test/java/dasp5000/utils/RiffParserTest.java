@@ -7,6 +7,7 @@ package dasp5000.utils;
 
 import dasp5000.domain.AudioHeader;
 import dasp5000.domain.DynamicArray;
+import dasp5000.domain.audiocontainers.AudioContainer;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -21,16 +22,16 @@ import org.junit.Test;
  */
 public class RiffParserTest {
     private File file;
-    private RiffParser parser;
-    private AudioHeader ah;
     private DynamicArray<Integer>[] channels;
+    private AudioHeader ah;
+    private AudioContainer ac;
     
     @Before
     public void setUp() throws UnsupportedAudioFileException, IOException {
         this.file = new File(ClassLoader.getSystemResource("test.wav").getPath());
-        this.parser = new RiffParser(file);
-        this.ah = this.parser.getHeader();
-        this.channels = this.parser.getChannels();
+        this.ac = RiffParser.parseFile(file);
+        this.ah = ac.getAudioHeader();
+        this.channels = ac.getChannels();
     }
     
     @After

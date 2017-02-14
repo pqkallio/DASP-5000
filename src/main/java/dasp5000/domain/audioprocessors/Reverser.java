@@ -24,10 +24,13 @@ public class Reverser implements AudioProcessor {
     
     @Override
     public void process() {
-        DynamicArray<Integer> data = audioContainer.getLeftChannel();
-        int j = data.size() - 1;
-        for (int i = 0; i < data.size() / 2; i++) {
-            switchSamples(i, j, data);
+        DynamicArray<Integer>[] data = audioContainer.getChannels();
+        int samples = audioContainer.getSamplesPerChannel();
+        int j = samples - 1;
+        for (int k = 0; k < samples / 2; k++) {
+            for (int i = 0; i < audioContainer.getNumberOfChannels(); i++) {
+                switchSamples(k, j, data[i]);
+            }
             j--;
         }
     }

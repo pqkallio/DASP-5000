@@ -10,7 +10,7 @@ package dasp5000.domain;
 public class AudioAnalysis {
     private final int peakSampleValue;
     private final int minimumSampleValue;
-    private final long samples;
+    private final int samples;
 
     /**
      * Constructor that creates a new AudioAnalysis object and saves the values
@@ -21,7 +21,7 @@ public class AudioAnalysis {
      * @param samples The amount of samples that the audio data consists of
      */
     public AudioAnalysis(int peakSampleValue, int minimumSampleValue,
-            long samples) {
+            int samples) {
         this.peakSampleValue = peakSampleValue;
         this.minimumSampleValue = minimumSampleValue;
         this.samples = samples;
@@ -50,7 +50,7 @@ public class AudioAnalysis {
      * 
      * @return the amount of samples
      */
-    public long getSamples() {
+    public int getSamples() {
         return samples;
     }
 }
