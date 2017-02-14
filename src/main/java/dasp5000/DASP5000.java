@@ -3,13 +3,17 @@ package dasp5000;
 
 import dasp5000.controllers.AudioController;
 import dasp5000.domain.DynamicArray;
+import dasp5000.domain.audiocontainers.AudioContainer;
 import dasp5000.domain.audioprocessors.Mixer;
 import dasp5000.domain.audioprocessors.Normalizer;
 import dasp5000.domain.audioprocessors.PhaseSwitcher;
 import dasp5000.domain.audioprocessors.Reverser;
 import dasp5000.utils.ByteConverter;
+import dasp5000.utils.RiffBuilder;
 import dasp5000.utils.RiffParser;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -26,15 +30,25 @@ public class DASP5000 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
-        File file = new File("/home/pqkallio/wavtest/mono.wav");
-        
         URL url = ClassLoader.getSystemResource("test.wav");
-        File file2 = new File(url.getPath());
-        System.out.println(file2.exists());
-        RiffParser parser = new RiffParser(file2);
-        for (int i = 0; i < parser.getChannels().length; i++) {
-            System.out.println(i + ": " + parser.getChannels()[i].size());
-        }
+        AudioController controller = new AudioController(url.getPath());
+        AudioContainer container = controller.getAudioContainer();
+        controller.printAudioAnalysis();
+//        File file2 = new File(url.getPath());
+//        System.out.println(file2.exists());
+//        AudioContainer audio = RiffParser.parseFile(file2);
+//        System.out.println(audio.getNumberOfChannels());
+//        System.out.println(audio.getSampleRate());
+//        byte[] bytes = RiffBuilder.createRiffWaveFileAsByteArray(audio);
+//        File outputFile = new File("/home/pqkallio/wavtest/testus.wav");
+//        FileOutputStream fos = new FileOutputStream(outputFile);
+//        fos.write(bytes);
+//        fos.close();
+//        File file3 = new File("/home/pqkallio/wavtest/testus.wav");
+//        System.out.println(file3.exists());
+//        AudioContainer audio2 = RiffParser.parseFile(file3);
+//        System.out.println(audio2.getNumberOfChannels());
+//        System.out.println(audio2.getSampleRate());
 //        AudioController controller1;
 //        AudioController controller2;
 //        AudioController controller3;

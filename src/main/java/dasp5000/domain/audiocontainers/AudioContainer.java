@@ -13,8 +13,8 @@ import javax.sound.sampled.AudioFormat;
  */
 public class AudioContainer {
     private AudioAnalysis audioAnalysis;
-    private final DynamicArray<Integer>[] audioData;
-    private final AudioFormat audioFormat;
+    private DynamicArray<Integer>[] audioData;
+//    private final AudioFormat audioFormat;
     private AudioHeader audioHeader;
 
     /**
@@ -23,9 +23,14 @@ public class AudioContainer {
      * @param audioFormat The AudioFormat object of the corresponding AudioInputStream.
      */
     public AudioContainer(AudioFormat audioFormat) {
-        this.audioFormat = audioFormat;
-        this.audioData = new DynamicArray[1];
+//        this.audioFormat = audioFormat;
+        this.audioData = null;
         this.audioHeader = null;
+    }
+
+    public AudioContainer() {
+        this.audioData = null;
+//        this.audioFormat = null;
     }
     
     /**
@@ -45,7 +50,7 @@ public class AudioContainer {
      * @param audioData Contains bytes combined as words
      */
     public void setChannels(DynamicArray<Integer>[] audioData) {
-        this.audioData[0] = audioData[0];
+        this.audioData = audioData;
     }
     
     /**
@@ -54,7 +59,7 @@ public class AudioContainer {
      * @return the number of channels
      */
     public int getNumberOfChannels() {
-        return this.audioFormat.getChannels();
+        return this.audioHeader.getNumberOfChannels();
     }
     
     /**
@@ -63,7 +68,7 @@ public class AudioContainer {
      * @return the amount of bits per sample
      */
     public int getBitsPerAudioSample() {
-        return this.audioFormat.getSampleSizeInBits();
+        return this.audioHeader.getBitsPerSample();
     }
     
     /**
@@ -71,18 +76,18 @@ public class AudioContainer {
      * 
      * @return the sample rate
      */
-    public float getSampleRate() {
-        return this.audioFormat.getSampleRate();
+    public int getSampleRate() {
+        return this.audioHeader.getSampleRate();
     }
     
-    /**
-     * Returns the endianness of the audio samples.
-     * 
-     * @return true if big-endian, false if little-endian
-     */
-    public boolean isBigEndian() {
-        return this.audioFormat.isBigEndian();
-    }
+//    /**
+//     * Returns the endianness of the audio samples.
+//     * 
+//     * @return true if big-endian, false if little-endian
+//     */
+//    public boolean isBigEndian() {
+//        return this.audioHeader.isBigEndian();
+//    }
 
     /**
      * Returns the DynamicArray object used to store the left channel's audio as 
@@ -111,16 +116,6 @@ public class AudioContainer {
      */
     public AudioAnalysis getAudioAnalysis() {
         return audioAnalysis;
-    }
-
-    /**
-     * Get the AudioFormat object that contains administrational information 
-     * about the audio.
-     * 
-     * @return AudioFormat object
-     */
-    public AudioFormat getAudioFormat() {
-        return audioFormat;
     }
 
     /**

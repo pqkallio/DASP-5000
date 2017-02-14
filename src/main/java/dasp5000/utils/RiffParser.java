@@ -4,6 +4,7 @@ package dasp5000.utils;
 import dasp5000.domain.AudioHeader;
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.WaveHeaderFields;
+import dasp5000.domain.audiocontainers.AudioContainer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,50 +33,39 @@ public class RiffParser {
         }
     }
     
-    private static final String TARGET_CHUNK_ID = "RIFF";
-    private static final String TARGET_FORMAT = "WAVE";
-    private final AudioHeader header;
-    private DynamicArray<Integer>[] channels;
-
-    /**
-     * Creates a new RiffParser object and parses the data of the RIFF WAVE 
-     * (.wav-file) given as parameter.
-     * 
-     * @param file the file to be parsed
-     * @throws IOException if file cannot be opened
-     * @throws UnsupportedAudioFileException if the file is not parsable
-     */
-    public RiffParser(File file) throws IOException, UnsupportedAudioFileException {
-        this.header = new AudioHeader();
-        parseFile(file);
-    }
-    
     /**
      * Parses the data of the RIFF WAVE (.wav-file) given as parameter.
      * 
      * @param file the file to be parsed
+     * @return AudioContainer object
      * @throws IOException if the file cannot be opened
      * @throws UnsupportedAudioFileException if the file is not parsable
      */
-    public void parseFile(File file) throws IOException, UnsupportedAudioFileException {
+    public static AudioContainer parseFile(File file) throws IOException, UnsupportedAudioFileException {
+        AudioContainer audioContainer = new AudioContainer();
         FileInputStream fis = new FileInputStream(file);
         byte[] bytes = new byte[44];
         int bytesRead = fis.read(bytes);
+        AudioHeader header = new AudioHeader();
         if (bytesRead == 44) {
-            parseHeader(bytes);
+            parseHeader(bytes, header);
+            audioContainer.setAudioHeader(header);
         } else {
             throw new UnsupportedAudioFileException("The audio file is malformed.");
         }
         byte[] data = new byte[header.getDataLengthInBytes()];
         bytesRead = fis.read(data);
+        DynamicArray<Integer>[] channels;
         if (bytesRead != -1) {
-            parseData(data);
+            channels = parseData(data, header);
+            audioContainer.setChannels(channels);
         } else {
             throw new UnsupportedAudioFileException("The audio file's data is invalid");
         }
+        return audioContainer;
     }
     
-    private String parseString(byte[] buffer, byte[] bytes, 
+    private static String parseString(byte[] buffer, byte[] bytes, 
             int offset, int byteCount) {
         readBytes(buffer, bytes, offset, byteCount);
         String string = "";
@@ -85,14 +75,14 @@ public class RiffParser {
         return string;
     }
     
-    private int parseInt(byte[] buffer, byte[] bytes, 
+    private static int parseInt(byte[] buffer, byte[] bytes, 
             int offset, int byteCount) {
         readBytes(buffer, bytes, offset, byteCount);
         int value = ByteConverter.byteToIntConversion(buffer, byteCount, false);
         return value;
     }
 
-    private void parseHeader(byte[] bytes) throws UnsupportedAudioFileException {
+    private static void parseHeader(byte[] bytes, AudioHeader header) throws UnsupportedAudioFileException {
         byte[] buffer = new byte[4];
         
         checkFormat(buffer, bytes);
@@ -121,7 +111,7 @@ public class RiffParser {
                 WaveHeaderFields.SUBCHUNK_2_SIZE.getByteCount()));
     }
 
-    private void readBytes(byte[] buffer, byte[] bytes, int offset, int byteCount) {
+    private static void readBytes(byte[] buffer, byte[] bytes, int offset, int byteCount) {
         int j = offset;
         for (int i = 0; i < byteCount; i++) {
             buffer[i] = bytes[j];
@@ -129,7 +119,7 @@ public class RiffParser {
         }
     }
 
-    private void checkFormat(byte[] buffer, byte[] bytes) 
+    private static void checkFormat(byte[] buffer, byte[] bytes) 
             throws UnsupportedAudioFileException {
         String chunkId = parseString(buffer, bytes, 
                 WaveHeaderFields.CHUNK_ID.getOffset(), 
@@ -137,13 +127,14 @@ public class RiffParser {
         String format = parseString(buffer, bytes, 
                 WaveHeaderFields.FORMAT.getOffset(), 
                 WaveHeaderFields.FORMAT.getByteCount());
-        if (!chunkId.equals(TARGET_CHUNK_ID) || !format.equals(TARGET_FORMAT)) {
+        if (!chunkId.equals(WaveHeaderFields.CHUNK_ID.getString())
+                || !format.equals(WaveHeaderFields.FORMAT.getString())) {
             throw new UnsupportedAudioFileException("The file was not "
                     + "recognized as a RIFF WAVE audio file.");
         }
     }
 
-    private void checkCompression(byte[] buffer, byte[] bytes) 
+    private static void checkCompression(byte[] buffer, byte[] bytes) 
             throws UnsupportedAudioFileException {
         int value = parseInt(buffer, bytes, 
                 WaveHeaderFields.AUDIO_FORMAT.getOffset(), 
@@ -155,8 +146,8 @@ public class RiffParser {
     }
 
     // parsing data doesn't work properly
-    private void parseData(byte[] data) {
-        this.channels = initializeArrays();
+    private static DynamicArray<Integer>[] parseData(byte[] data, AudioHeader header) {
+        DynamicArray<Integer>[] channels = initializeArrays(header);
         int bytesPerSample = header.getBitsPerSample() / 8;
         byte[] buffer = new byte[bytesPerSample];
         for (int i = 0; i < data.length; i += bytesPerSample) {
@@ -166,9 +157,10 @@ public class RiffParser {
             channels[(i % (bytesPerSample * channels.length)) / bytesPerSample]
                     .add(sample);
         }
+        return channels;
     }
 
-    private DynamicArray<Integer>[] initializeArrays() {
+    private static DynamicArray<Integer>[] initializeArrays(AudioHeader header) {
         DynamicArray<Integer>[] array 
                 = new DynamicArray[header.getNumberOfChannels()];
         
@@ -177,27 +169,5 @@ public class RiffParser {
         }
         
         return array;
-    }
-
-    /**
-     * Get the audio data parsed from the file. The returned array contains
-     * each audio channel's samples as a DynamicArray. The audio samples are
-     * integers.
-     * 
-     * @return an array of DynamicArrays consisting of the audio samples of the
-     * audio channels in the file
-     */
-    public DynamicArray<Integer>[] getChannels() {
-        return channels;
-    }
-
-    /**
-     * Get the header data parsed from the file.
-     * 
-     * @return AudioHeader object containing information parsed from the file
-     * 
-     */
-    public AudioHeader getHeader() {
-        return header;
     }
 }
