@@ -1,5 +1,5 @@
 
-package dasp5000.domain.audioprocessors;
+package dasp5000.obsoletestuff.audioprocessors;
 
 import dasp5000.domain.AudioHeader;
 import dasp5000.domain.DynamicArray;
@@ -129,8 +129,14 @@ public class Mixer implements AudioProcessor {
         for (int j = 0; j < audioContainers.size(); j++) {
             AudioContainer ac = audioContainers.get(j);
             if (ac.getAudioAnalysis().getSamples() > index) {
-                double sample = sampleToDouble(ac.getChannels()[channel].get(index), 
+                double sample;
+                if (ac.getChannels().length > index) {
+                    sample = sampleToDouble(ac.getChannels()[channel].get(index), 
                         maxSample);
+                } else {
+                    sample = sampleToDouble(ac.getChannels()[0].get(index), 
+                        maxSample);
+                }
                 double newValue = mixValue + sample;
                 if (newValue > 0) {
                     mixValue = newValue - mixValue * sample;

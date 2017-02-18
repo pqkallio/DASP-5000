@@ -1,8 +1,9 @@
 
-package dasp5000.domain.audioprocessors;
+package dasp5000.obsoletestuff.audioprocessors;
 
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
+import dasp5000.domain.audioprocessors.Analyzer;
 import dasp5000.utils.DecibelConverter;
 
 

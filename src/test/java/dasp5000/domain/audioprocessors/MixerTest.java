@@ -5,7 +5,8 @@
  */
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.obsoletestuff.audioprocessors.AudioProcessor;
+import dasp5000.obsoletestuff.audioprocessors.Mixer;
+import dasp5000.domain.audiocontainers.AudioContainer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,14 +14,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+
 /**
  *
- * @author petrikallio
+ * @author pqkallio
  */
-public class AudioProcessorTest {
-    
-    public AudioProcessorTest() {
-    }
+public class MixerTest {
     
     @BeforeClass
     public static void setUpClass() {
@@ -37,13 +36,9 @@ public class AudioProcessorTest {
     @After
     public void tearDown() {
     }
-
-
-    public class AudioProcessorImpl implements AudioProcessor {
-
-        @Override
-        public void process() {
-        }
-    }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void ifNoAudioContainersIllegalArgumentEx() {
+        new Mixer(new AudioContainer[] {});
+    }
 }

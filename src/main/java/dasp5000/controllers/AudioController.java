@@ -56,6 +56,12 @@ public class AudioController {
             Analyzer.analyse(this.audioContainer);
         }
     }
+
+    public AudioController(File file) throws IOException, UnsupportedAudioFileException {
+        this.fileName = null;
+        this.audioContainer = RiffParser.parseFile(file);
+        Analyzer.analyse(audioContainer);
+    }
     
     /**
      * Write the data of the AudioContainer object into a audio file. The file's 
@@ -85,18 +91,6 @@ public class AudioController {
         return audioContainer;
     }
     
-    /**
-     * This method is purely for debugging purposes. It prints the minimum 
-     * and peak sample values as well as the length of the audio clip.
-     */
-    public void printAudioAnalysis() {
-        AudioAnalysis analysis = this.audioContainer.getAudioAnalysis();
-        System.out.println("Minimum sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getMinimumSampleValue(), (int)Math.pow(2, this.audioContainer.getBitsPerAudioSample())));
-        System.out.println("Peak sample value in dBFS: " + DecibelConverter.sampleValueToDecibels(analysis.getPeakSampleValue(), (int)Math.pow(2, this.audioContainer.getBitsPerAudioSample())));
-        double time = 1.0 * analysis.getSamples() / this.audioContainer.getSampleRate();
-        System.out.println("Audio clip length: " + (int)Math.floor(time / 60) + " minutes " + time % 60 + " seconds");
-    }
-
     public String getFileName() {
         return fileName;
     }

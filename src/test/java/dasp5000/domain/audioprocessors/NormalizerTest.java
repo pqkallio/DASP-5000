@@ -5,6 +5,7 @@
  */
 package dasp5000.domain.audioprocessors;
 
+import dasp5000.obsoletestuff.audioprocessors.Normalizer;
 import dasp5000.controllers.AudioController;
 import dasp5000.domain.audiocontainers.AudioContainer;
 import dasp5000.utils.DecibelConverter;

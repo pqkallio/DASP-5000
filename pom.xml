@@ -49,10 +49,14 @@
                 <version>1.1.11</version>
                 <configuration>
                     <targetClasses>
-                        <param>dasp5000.*</param>
+                        <param>dasp5000.controllers.*</param>
+                        <param>dasp5000.domain.*</param>
+                        <param>dasp5000.utils.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>dasp5000.*</param>
+                        <param>dasp5000.controllers.*</param>
+                        <param>dasp5000.domain.*</param>
+                        <param>dasp5000.utils.*</param>
                     </targetTests>
                 </configuration>
              </plugin>

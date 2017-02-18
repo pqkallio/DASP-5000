@@ -8,7 +8,6 @@ package dasp5000.domain.audioprocessors;
 import dasp5000.domain.AudioHeader;
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
-import javax.sound.sampled.AudioFormat;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
