@@ -16,11 +16,11 @@ public class Duration {
     }
     
     public int getHours() {
-        return (this.samples / this.samplingFrequency) / 360;
+        return (this.samples / this.samplingFrequency) / 3600;
     }
     
     public int getMinutes() {
-        return ((this.samples / this.samplingFrequency) % 360) / 60;
+        return ((this.samples / this.samplingFrequency) % 3600) / 60;
     }
     
     public double getSeconds() {

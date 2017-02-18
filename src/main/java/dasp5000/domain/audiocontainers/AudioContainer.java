@@ -93,6 +93,9 @@ public class AudioContainer {
      * @return a DynamicArray of integers
      */
     public DynamicArray<Integer> getRightChannel() {
+        if (getNumberOfChannels() == 1) {
+            return audioData[0];
+        }
         if (checkAudioData(1)) {
             return audioData[1];
         }
