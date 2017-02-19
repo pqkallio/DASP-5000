@@ -9,7 +9,7 @@ import java.io.File;
  */
 public interface Notifiable {
     public void notify(Exception ex);
-    public void audioControllerAdded();
+    public void audioPanelAdded();
     public File getCurrentDirectory();
     public void setCurrentDirectory(File file);
 }

@@ -3,6 +3,7 @@ package dasp5000.gui.listeners;
 
 import dasp5000.controllers.AudioController;
 import dasp5000.domain.DynamicArray;
+import dasp5000.gui.AudioPanel;
 import dasp5000.gui.Notifiable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,13 +17,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Petri Kallio
  */
-public class FileOpenerButtonListener implements ActionListener {
-    private DynamicArray<AudioController> controllers;
+public class FileOpenerListener implements ActionListener {
+    private DynamicArray<AudioPanel> audioPanels;
     private Notifiable notifiable;
 
-    public FileOpenerButtonListener(Notifiable notifiable,
-            DynamicArray<AudioController> controllers) {
-        this.controllers = controllers;
+    public FileOpenerListener(Notifiable notifiable,
+            DynamicArray<AudioPanel> audioPanels) {
+        this.audioPanels = audioPanels;
         this.notifiable = notifiable;
     }
     
@@ -43,8 +44,9 @@ public class FileOpenerButtonListener implements ActionListener {
             File file = fileChooser.getSelectedFile();
             notifiable.setCurrentDirectory(fileChooser.getCurrentDirectory());
             try {
-                controllers.add(new AudioController(file));
-                notifiable.audioControllerAdded();
+                AudioController ac = new AudioController(file);
+                audioPanels.add(new AudioPanel(ac));
+                notifiable.audioPanelAdded();
             } catch (IOException ex) {
                 this.notifiable.notify(ex);
             } catch (UnsupportedAudioFileException ex) {

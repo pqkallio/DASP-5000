@@ -42,4 +42,22 @@ public class Duration {
     public void setSamplingFrequency(int samplingFrequency) {
         this.samplingFrequency = samplingFrequency;
     }
+
+    @Override
+    public String toString() {
+        int hours = getHours();
+        int mins = getMinutes();
+        double secs = getSeconds();
+        String string = addZeroIfNeeded(hours) + hours + ":";
+        string += addZeroIfNeeded(mins) + mins + ":";
+        string += addZeroIfNeeded(secs) + String.format("%.3f", secs);
+        return string;
+    }
+
+    private String addZeroIfNeeded(double integer) {
+        if (integer < 10) {
+            return "0";
+        }
+        return "";
+    }
 }

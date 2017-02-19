@@ -58,7 +58,7 @@ public class AudioController {
     }
 
     public AudioController(File file) throws IOException, UnsupportedAudioFileException {
-        this.fileName = null;
+        this.fileName = file.getPath();
         this.audioContainer = RiffParser.parseFile(file);
         Analyzer.analyse(audioContainer);
     }
