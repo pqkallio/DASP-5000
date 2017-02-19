@@ -21,5 +21,3 @@ Avattuasi halutun tiedoston tai tiedostot, voit valita checkboxilla tiedostot, j
   - vaihtaa kaikkien näytteiden vaiheen, eli tekee miinusmerkkisistä näytteistä plusmerkkisiä ja päin vastoin
 5. Reverse
   - kääntää äänitiedoston ympäri, joten se soi tämän jälkeen lopusta alkuun eikä alusta loppuun
-  
-_Huom!_ Tällä hetkellä ohjelma avaa ainoastaan pakkaamattomia PCM WAV -tiedostoja, joten floating point precision wav -tiedostojen avaaminen ei onnistu, eikä myöskään pakattujen äänitiedostojen tai aiff-tiedostojen avaaminen.

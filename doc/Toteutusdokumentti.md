@@ -9,7 +9,7 @@ Hierarkiakaavio toteutetaan myöhemmin, mutta tässä yleistä tietoa toteutetui
 - ByteConverter-luokka, jolla muunnetaan audiotiedoston tavudataa muokattavaksi äänidataksi ja äänidataa jälleen tavuiksi
 - RiffParser-luokka, jolla muunnetaan RIFF WAVE -tiedosto AudioContainer-olioksi
 - RiffBuilder-luokka, jolla muunnetaan AudioContainer-olio RIFF WAVE -tiedostoksi
-- AudioProcessor-rajapinta, jonka kaikki ääntä muokkaavat luokat toteuttavat
+- AudioProcessor abstrakti luokka, jonka kaikki ääntä muokkaavat luokat toteuttavat
 - DecibelConverter-luokka, jolla muunnetaan dBFS-arvoja (decibels relative to full scale) ääninäytteiksi ja ääninäytteitä dBFS-arvoiksi
 - DynamicArray-luokka on dynaaminen ja geneerinen taulukko
 
@@ -24,3 +24,4 @@ Pseudokoodi toteutetaan myöhemmin.
 | Normalizer    | O(n)          | O(1)          |
 | PhaseSwitcher | O(n)          | O(1)          |
 | Reverser      | O(n)          | O(1)          |
+| Gate          | O(n)          | O(1)          |

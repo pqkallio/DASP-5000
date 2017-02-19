@@ -11,16 +11,18 @@ public class Gate extends AudioProcessorAbstract {
     private int attackCountDown;
     private int releaseCountUp;
     private int sustainCountDown;
+    private final int numChannels;
     
     public Gate(AudioContainer audioContainer, int threshold, int attack, int sustain, int release) {
         super(audioContainer);
-        this.threshold = threshold;
-        this.attack = attack;
-        this.release = release;
-        this.attackCountDown = attack;
+        this.numChannels = audioContainer.getNumberOfChannels();
+        this.threshold = threshold * numChannels;
+        this.attack = attack * numChannels;
+        this.release = release * numChannels;
+        this.attackCountDown = this.attack;
         this.releaseCountUp = 0;
-        this.sustain = sustain;
-        this.sustainCountDown = sustain;
+        this.sustain = sustain * numChannels;
+        this.sustainCountDown = this.sustain;
     }
     
     @Override
@@ -61,27 +63,27 @@ public class Gate extends AudioProcessorAbstract {
     }
 
     public int getAttack() {
-        return attack;
+        return attack / numChannels;
     }
 
     public int getRelease() {
-        return release;
+        return release / numChannels;
     }
 
     public int getThreshold() {
-        return threshold;
+        return threshold / numChannels;
     }
 
     public void setAttack(int attack) {
-        this.attack = attack;
+        this.attack = attack * numChannels;
     }
 
     public void setRelease(int release) {
-        this.release = release;
+        this.release = release * numChannels;
     }
 
     public void setThreshold(int threshold) {
-        this.threshold = threshold;
+        this.threshold = threshold * numChannels;
     }
     
 }
