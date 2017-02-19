@@ -3,6 +3,7 @@ package dasp5000;
 
 import dasp5000.controllers.AudioController;
 import dasp5000.domain.audiocontainers.AudioContainer;
+import dasp5000.domain.audioprocessors.Gate;
 import dasp5000.domain.audioprocessors.MixerFromAbstract;
 import dasp5000.obsoletestuff.audioprocessors.Normalizer;
 import dasp5000.domain.audioprocessors.NormalizerFromAbstract;
@@ -40,8 +41,8 @@ public class DASP5000 {
 //        GraphicalUI gui = new GraphicalUI();
 //        SwingUtilities.invokeLater(gui);
         AudioController controller1 = new AudioController("/home/pqkallio/wavtest/test.wav");
-        ReverserFromAbstract r = new ReverserFromAbstract(controller1.getAudioContainer());
-        r.process();
-        controller1.writeToFile("/home/pqkallio/wavtest/kaantotesti.wav");
+        Gate g = new Gate(controller1.getAudioContainer(), 10000, 1000, 5000, 50);
+        g.process();
+        controller1.writeToFile("/home/pqkallio/wavtest/gatetesti.wav");
     }
 }

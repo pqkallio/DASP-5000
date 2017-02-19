@@ -7,33 +7,45 @@ public class Gate extends AudioProcessorAbstract {
     private int threshold;
     private int attack;
     private int release;
+    private int sustain;
     private int attackCountDown;
-    private int releaseCountDown;
-    private boolean underAttack;
-    private boolean underRelease;
-    private boolean belowTheThreshold;
+    private int releaseCountUp;
+    private int sustainCountDown;
     
-    public Gate(AudioContainer audioContainer, int threshold, int attack, int release) {
+    public Gate(AudioContainer audioContainer, int threshold, int attack, int sustain, int release) {
         super(audioContainer);
         this.threshold = threshold;
         this.attack = attack;
         this.release = release;
-        this.attackCountDown = 0;
-        this.releaseCountDown = 0;
-        this.underAttack = false;
-        this.underRelease = false;
-        this.belowTheThreshold = false;
+        this.attackCountDown = attack;
+        this.releaseCountUp = 0;
+        this.sustain = sustain;
+        this.sustainCountDown = sustain;
     }
     
     @Override
     protected void processSample(int sampleIndex, int channelIndex, int... samples) {
-        if (samples[0] < threshold) {
-            if (belowTheThreshold) {
-                super.audioContainers[0]
-                        .getChannels()[channelIndex]
-                        .replace(sampleIndex, 0);
+        if (Math.abs(samples[0]) < threshold) {
+            if (sustainCountDown > 0) {
+                sustainCountDown--;
+            } else if (attackCountDown > 0) {
+                attackCountDown--;
+                releaseCountUp = 0;
+                int newSample = (int)(1.0 * samples[0] * (1.0 * attackCountDown / attack));
+                super.audioContainers[0].getChannels()[channelIndex]
+                                        .replace(sampleIndex, newSample);
             } else {
-                
+                super.audioContainers[0].getChannels()[channelIndex]
+                                        .replace(sampleIndex, 0);
+            }
+        } else {
+            sustainCountDown = sustain;
+            if (releaseCountUp < release) {
+                releaseCountUp++;
+                attackCountDown = attack;
+                int newSample = (int)(1.0 * samples[0] * (1.0 * releaseCountUp / release));
+                super.audioContainers[0].getChannels()[channelIndex]
+                                        .replace(sampleIndex, newSample);
             }
         }
     }
