@@ -20,9 +20,14 @@ public class SpectrumAnalysisSample {
     
     public void addLoudnessSample(LoudnessSample sample) {
         this.samples[sampleIndex] = sample;
+        sampleIndex++;
     }
 
     public LoudnessSample[] getSamples() {
         return samples;
+    }
+
+    public int getSampleStart() {
+        return sampleStart;
     }
 }

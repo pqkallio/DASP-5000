@@ -45,7 +45,7 @@ public class FFT {
     
     public void fft(double[] re, double[] im, int from) {
         int i, j, k, n1, n2, a;
-        double c, s, e, t1, t2;
+        double c, s, t1, t2;
         
         j = 0;
         n2 = windowsize / 2;

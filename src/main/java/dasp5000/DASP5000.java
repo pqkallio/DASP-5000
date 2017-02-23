@@ -2,12 +2,25 @@
 package dasp5000;
 
 import dasp5000.controllers.AudioController;
+import dasp5000.domain.AudioHeader;
 import dasp5000.domain.DFT;
+import dasp5000.domain.DynamicArray;
 import dasp5000.domain.FFT;
+import dasp5000.domain.LoudnessSample;
+import dasp5000.domain.SpectrumAnalysisSample;
+import dasp5000.domain.audiocontainers.AudioContainer;
+import dasp5000.domain.audioprocessors.Analyzer;
+import dasp5000.domain.audioprocessors.Gate;
+import dasp5000.domain.audioprocessors.MixerFromAbstract;
+import dasp5000.domain.audioprocessors.NormalizerFromAbstract;
+import dasp5000.domain.audioprocessors.PhaseSwitcherFromAbstract;
+import dasp5000.domain.audioprocessors.ReverserFromAbstract;
 import dasp5000.domain.audioprocessors.SpectrumAnalyzer;
 import dasp5000.gui.GraphicalUI;
+import dasp5000.utils.RiffBuilder;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.SwingUtilities;
 
@@ -25,106 +38,115 @@ public class DASP5000 {
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
 //        GraphicalUI gui = new GraphicalUI();
 //        SwingUtilities.invokeLater(gui);
-        AudioController controller = new AudioController(new File("/home/pqkallio/wavtest/sine/mixed_sine2.wav"));
-        System.out.println("channels: " + controller.getAudioContainer().getNumberOfChannels());
-        SpectrumAnalyzer sa = new SpectrumAnalyzer(controller.getAudioContainer());
-        sa.process();
-        double[][] re = sa.getChannelData();
-        double[][] im = sa.getImaginaryData();
-        for (int i = 0; i < re[0].length; i += sa.getWindowSize()) {
-            System.out.println("\n*****\n*****\n" + i + "\n*****\n*****\n");
-            for (int j = i; j < i + sa.getWindowSize() / 2; j++) {
-                for (int k = 0; k < re.length; k++) {
-                    double freq = ((j - i) * 44100 / 2) / (sa.getWindowSize() / 2);
-                    double magnitude = Math.sqrt(re[k][j] * re[k][j] + im[k][j] * im[k][j]);
-                    if (magnitude > 5000) {
-                        if (k == 0) {
-                            System.out.print("L: ");
-                        } else {
-                            System.out.print("R: ");
-                        }
-                        System.out.println(freq + "\t" + magnitude);
-                    }
-                }
+        
+        for (int audioLength = 0; audioLength <= 10000; audioLength += 1000) {
+            AudioHeader header = new AudioHeader("WAVE", 1, 44100, 16, 4, 44100, audioLength);
+            AudioContainer container = new AudioContainer(header);
+            DynamicArray<Integer> array = new DynamicArray<>(Integer.class);
+            int maxSample = (int)Math.pow(2, 16);
+            for (int i = 0; i < audioLength; i++) {
+                int sample = new Random().nextInt(maxSample) - (maxSample / 2); 
+                array.add(sample);
             }
+            container.setChannels(new DynamicArray[] {array});
+            long[] times = new long[1000];
+            for (int i = 0; i < 1000; i++) {
+                long now = System.currentTimeMillis();
+                Analyzer.analyse(container);
+                times[i] = System.currentTimeMillis() - now;
+            }
+
+            System.out.println("SAMPLES: " + audioLength);
+            
+            System.out.println("Analyzer avg: " + average(times));
+
+            for (int i = 0; i < 1000; i++) {
+                long now = System.currentTimeMillis();
+                new Gate(container, -6, 100, 1000, 500).process();
+                times[i] = System.currentTimeMillis() - now;
+            }
+
+            System.out.println("Gate avg: " + average(times));
+
+            for (int i = 0; i < 1000; i++) {
+                long now = System.currentTimeMillis();
+                new MixerFromAbstract(container).process();
+                times[i] = System.currentTimeMillis() - now;
+            }
+
+            System.out.println("Mixer avg: " + average(times));
+
+            for (int i = 0; i < 1000; i++) {
+                long now = System.currentTimeMillis();
+                new NormalizerFromAbstract(container, -6).process();
+                times[i] = System.currentTimeMillis() - now;
+            }
+
+            System.out.println("Normalizer avg: " + average(times));
+
+            for (int i = 0; i < 1000; i++) {
+                long now = System.currentTimeMillis();
+                new PhaseSwitcherFromAbstract(container).process();
+                times[i] = System.currentTimeMillis() - now;
+            }
+
+            System.out.println("Phase switch avg: " + average(times));
+
+            for (int i = 0; i < 1000; i++) {
+                long now = System.currentTimeMillis();
+                new ReverserFromAbstract(container).process();
+                times[i] = System.currentTimeMillis() - now;
+            }
+
+            System.out.println("Reverser avg: " + average(times));
         }
-//        double[][] analysis = DFT.transform(samples);
-//        for (int i = 0; i < analysis[0].length; i++) {
-//            if (analysis[1][i] > -30) {
-//                System.out.println(analysis[0][i] + " / " + analysis[1][i] + " / " + analysis[2][i]);
+        
+        for (int audioLength = 88200; audioLength <= 88200 * 10; audioLength += 88200) {
+            AudioHeader header = new AudioHeader("WAVE", 1, 44100, 16, 4, 44100, audioLength);
+            AudioContainer container = new AudioContainer(header);
+            DynamicArray<Integer> array = new DynamicArray<>(Integer.class);
+            int maxSample = (int)Math.pow(2, 16);
+            for (int i = 0; i < audioLength; i++) {
+                int sample = new Random().nextInt(maxSample) - (maxSample / 2); 
+                array.add(sample);
+            }
+            container.setChannels(new DynamicArray[] {array});
+            long[] times = new long[10];
+            System.out.println("SAMPLES: " + audioLength);
+            for (int i = 0; i < 10; i++) {
+                long now = System.currentTimeMillis();
+                new SpectrumAnalyzer(container).process();
+                times[i] = System.currentTimeMillis() - now;
+            }
+
+            System.out.println("Spectrum analyser avg: " + average(times));
+            System.out.println("");
+        }
+        
+//        AudioController controller = new AudioController(new File(ClassLoader.getSystemResource("pt/110.wav").getPath()));
+//        SpectrumAnalyzer sa = new SpectrumAnalyzer(controller.getAudioContainer());
+//        sa.process();
+//        SpectrumAnalysisSample[] analysis = sa.getAnalysis();
+        
+//        for (int i = 0; i < analysis.length; i++) {
+//            System.out.println(analysis[i].getSampleStart() + ":");
+//            for (int j = 0; j < analysis[i].getSamples().length; j++) {
+//                LoudnessSample ls = analysis[i].getSamples()[j];
+//                System.out.print(ls.getFrequency() + "\t\t");
+//                for (int k = 0; k < ls.getMagnitude().length; k++) {
+//                    System.out.print(ls.getMagnitude()[k] + "\t");
+//                }
+//                System.out.println("");
 //            }
 //        }
+    }
 
-//        int N = (int)Math.pow(2, 15);
-//        FFT fft = new FFT(N);
-//        fft.fft(samples, empty);
-//        for (int i = 0; i < samples.length / 2; i++) {
-//            double magnitude = Math.sqrt(samples[i] * samples[i] + empty[i] * empty[i]);
-//            if (magnitude > 100) {
-//                System.out.println(((i * 44100 / 2) / (N / 2)) + " / " + samples[i] + " / " + empty[i] + " / " + magnitude);
-//            }
-//        }
-//        
-//        double[] window = fft.getWindow();
-//        double[] re = new double[N];
-//        double[] im = new double[N];
-//        
-//        re[0] = 1;
-//        im[0] = 0;
-//        
-//        for (int i = 1; i < N; i++) {
-//            re[i] = im[i] = 0;
-//        }
-//        beforeAfter(fft, re, im);
-//        
-//        for (int i = 0; i < N; i++) {
-//            re[i] = Math.pow(-1, i);
-//            im[i] = 0;
-//        }
-//        beforeAfter(fft, re, im);
-//        
-//        for (int i = 0; i < N; i++) {
-//            re[i] = Math.cos(2 * Math.PI * i / N);
-//            im[i] = 0;
-//        }
-//        beforeAfter(fft, re, im);
-//        
-//        for (int i = 0; i < N; i++) {
-//            re[i] = i;
-//            im[i] = 0;
-//        }
-//        beforeAfter(fft, re, im);
-//        
-//        long time = System.currentTimeMillis();
-//        double iter = 30000;
-//        
-//        for (int i = 0; i < iter; i++) {
-//            fft.fft(re, im);
-//        }
-//        
-//        time = System.currentTimeMillis() - time;
-//        System.out.println("Averaged " + (time / iter) + " ms per iteration");
-//    }
-//
-//    private static void beforeAfter(FFT fft, double[] re, double[] im) {
-//        System.out.println("Before: ");
-//        printReIm(re, im);
-//        fft.fft(re, im);
-//        System.out.println("After: ");
-//        printReIm(re, im);
-//    }
-//
-//    private static void printReIm(double[] re, double[] im) {
-//        System.out.print("Re: [");
-//        for (int i = 0; i < re.length; i++) {
-//            System.out.print(((int)(re[i] * 1000 / 1000.0)) + " ");
-//        }
-//        System.out.print("]\nIm: [");
-//        for (int i = 0; i < im.length; i++) {
-//            System.out.print(((int)(im[i] * 1000 / 1000.0)) + " ");
-//        }
-//        System.out.println("]");
-//    }
-
+    private static double average(long[] times) {
+        long sum = 0;
+        for (int i = 1; i < times.length; i++) {
+            sum += times[i];
+        }
+        
+        return 1.0 * sum / (times.length - 1);
     }
 }

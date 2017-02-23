@@ -145,7 +145,6 @@ public class RiffParser {
         }
     }
 
-    // parsing data doesn't work properly
     private static DynamicArray<Integer>[] parseData(byte[] data, AudioHeader header) {
         DynamicArray<Integer>[] channels = initializeArrays(header);
         int bytesPerSample = header.getBitsPerSample() / 8;

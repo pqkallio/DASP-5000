@@ -27,6 +27,14 @@ public class LoudnessSample implements Comparable<LoudnessSample>{
         return mags;
     }
 
+    public double getFrequency() {
+        return frequency;
+    }
+
+    public double[] getMagnitude() {
+        return magnitude;
+    }
+
     @Override
     public int compareTo(LoudnessSample o) {
         int dif = this.startSample - o.startSample;

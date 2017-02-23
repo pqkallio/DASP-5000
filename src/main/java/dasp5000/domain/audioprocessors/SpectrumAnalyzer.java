@@ -18,6 +18,7 @@ public class SpectrumAnalyzer {
     private int numChannels;
     private int samplesPerChannel;
     private int windowSize;
+    private int windowsToCreate;
     private int channelLength;
 
     public SpectrumAnalyzer(AudioContainer audioContainer) {
@@ -29,7 +30,7 @@ public class SpectrumAnalyzer {
         int maxSample = (int)Math.pow(2, this.audioContainer.getBitsPerAudioSample()) / 2;
         DynamicArray<Integer>[] channels = audioContainer.getChannels();
         double windowsPerChannel = 1.0 * samplesPerChannel / this.windowSize;
-        int windowsToCreate = (int)(Math.ceil(1.0 * samplesPerChannel / this.windowSize));
+        this.windowsToCreate = (int)(Math.ceil(1.0 * samplesPerChannel / this.windowSize));
         this.channelLength = windowsToCreate * windowSize;
         this.channelData = new double[numChannels][channelLength];
         this.imaginaryData = new double[numChannels][channelLength];
@@ -70,9 +71,9 @@ public class SpectrumAnalyzer {
     }
     
     public SpectrumAnalysisSample[] getAnalysis() {
-        SpectrumAnalysisSample[] analysis = new SpectrumAnalysisSample[channelData.length];
+        SpectrumAnalysisSample[] analysis = new SpectrumAnalysisSample[windowsToCreate];
         int analysisIndex = 0;
-        for (int i = 0; i < channelData.length; i += windowSize) {
+        for (int i = 0; i < channelData[0].length; i += windowSize) {
             SpectrumAnalysisSample sas = new SpectrumAnalysisSample(i, windowSize);
             LoudnessSample ls = null;
             for (int j = i; j < i + windowSize / 2; j++) {
