@@ -33,9 +33,9 @@ public class DynamicArray<T> {
         array[size] = object;
         size++;
         
-        if (size > array.length * 0.75) {
+        if (size == array.length) {
             increaseArrayLength();
-        } else if (array.length > 64 && size < array.length * 0.25) {
+        } else if (array.length > 64 && size < array.length * 0.3) {
             decreaseArrayLength();
         }
     }
