@@ -6,7 +6,7 @@
 package dasp5000.gui.listeners;
 
 import dasp5000.domain.DynamicArray;
-import dasp5000.domain.audioprocessors.ReverserFromAbstract;
+import dasp5000.domain.audioprocessors.Reverser;
 import dasp5000.gui.AudioPanel;
 import dasp5000.gui.Notifiable;
 import java.awt.event.ActionEvent;
@@ -30,7 +30,7 @@ public class ReverserListener implements ActionListener {
         for (int i = 0; i < audioPanels.size(); i++) {
             AudioPanel ap = audioPanels.get(i);
             if (ap.isSelected()) {
-                new ReverserFromAbstract(audioPanels.get(i)
+                new Reverser(audioPanels.get(i)
                         .getAudioController()
                         .getAudioContainer())
                         .process();

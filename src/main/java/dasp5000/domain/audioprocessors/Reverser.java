@@ -9,7 +9,7 @@ import dasp5000.domain.audiocontainers.AudioContainer;
  * 
  * @author Petri Kallio
  */
-public class ReverserFromAbstract extends AudioProcessorAbstract {
+public class Reverser extends AudioProcessor {
     private int[] backIndexes;
     
     /**
@@ -18,7 +18,7 @@ public class ReverserFromAbstract extends AudioProcessorAbstract {
      * @param audioContainer the AudioContainer object which audio is to be 
      * reversed.
      */
-    public ReverserFromAbstract(AudioContainer audioContainer) {
+    public Reverser(AudioContainer audioContainer) {
         super(audioContainer);
         int numChannels = audioContainer.getNumberOfChannels();
         int audioLength = audioContainer.getSamplesPerChannel();

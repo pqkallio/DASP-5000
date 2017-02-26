@@ -1,5 +1,5 @@
 
-package dasp5000.domain;
+package dasp5000.obsoletestuff.domain;
 
 /**
  *

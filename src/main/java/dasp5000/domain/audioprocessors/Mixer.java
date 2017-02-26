@@ -10,7 +10,7 @@ import dasp5000.domain.audiocontainers.AudioContainer;
  * 
  * @author Petri Kallio
  */
-public class MixerFromAbstract extends AudioProcessorAbstract {
+public class Mixer extends AudioProcessor {
     private final AudioContainer mix;
     private final int mixLength;
     private final int bitsPerSample;
@@ -22,7 +22,7 @@ public class MixerFromAbstract extends AudioProcessorAbstract {
      * 
      * @param audioContainers the AudioContainer's which signals are to be mixed
      */
-    public MixerFromAbstract(AudioContainer... audioContainers) {
+    public Mixer(AudioContainer... audioContainers) {
         super(audioContainers);
         this.mixLength = longestAudio();
         this.bitsPerSample = audioContainers[0].getBitsPerAudioSample();

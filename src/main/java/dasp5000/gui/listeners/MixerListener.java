@@ -4,7 +4,7 @@ package dasp5000.gui.listeners;
 import dasp5000.controllers.AudioController;
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
-import dasp5000.domain.audioprocessors.MixerFromAbstract;
+import dasp5000.domain.audioprocessors.Mixer;
 import dasp5000.gui.AudioPanel;
 import dasp5000.gui.Notifiable;
 import java.awt.event.ActionEvent;
@@ -37,7 +37,7 @@ public class MixerListener implements ActionListener {
             containers[i] = selected.get(i).getAudioController().getAudioContainer();
         }
         
-        MixerFromAbstract mixer = new MixerFromAbstract(containers);
+        Mixer mixer = new Mixer(containers);
         mixer.process();
         AudioContainer mix = mixer.getMix();
         AudioController controller = new AudioController(mix);

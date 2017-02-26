@@ -8,6 +8,7 @@ import dasp5000.domain.SpectrumAnalysisSample;
 import dasp5000.domain.audiocontainers.AudioContainer;
 
 /**
+ * A Spectrum analyzer.
  *
  * @author Petri Kallio
  */
@@ -20,13 +21,19 @@ public class SpectrumAnalyzer {
     private int windowSize;
     private int windowsToCreate;
     private int channelLength;
+    private int sampleRate;
 
+    /**
+     * Constructor
+     * 
+     * @param audioContainer the AudioContainer
+     */
     public SpectrumAnalyzer(AudioContainer audioContainer) {
         this.windowSize = (int)Math.pow(2, 15);
         this.audioContainer = audioContainer;
         this.numChannels = audioContainer.getNumberOfChannels();
         this.samplesPerChannel = audioContainer.getSamplesPerChannel();
-        int sampleRate = audioContainer.getSampleRate();
+        this.sampleRate = audioContainer.getSampleRate();
         int maxSample = (int)Math.pow(2, this.audioContainer.getBitsPerAudioSample()) / 2;
         DynamicArray<Integer>[] channels = audioContainer.getChannels();
         double windowsPerChannel = 1.0 * samplesPerChannel / this.windowSize;
@@ -49,27 +56,32 @@ public class SpectrumAnalyzer {
         }
     }
     
+    /**
+     * Analyse a AudioContainer's audio data
+     */
     public void process() {
         FFT fft = new FFT(windowSize);
         for (int i = 0; i < channelLength; i += windowSize) {
             for (int j = 0; j < numChannels; j++) {
-                fft.fft(channelData[j], imaginaryData[j], i);
+                fft.transform(channelData[j], imaginaryData[j], i);
             }
         }
     }
 
-    public double[][] getChannelData() {
-        return channelData;
-    }
-
-    public double[][] getImaginaryData() {
-        return imaginaryData;
-    }
-
+    /**
+     * Get the window size
+     * 
+     * @return the window size
+     */
     public int getWindowSize() {
         return windowSize;
     }
     
+    /**
+     * Get the analysis as an array of SpectrumAnalysisSamples
+     * 
+     * @return an array of SpectrumAnalysisSamples
+     */
     public SpectrumAnalysisSample[] getAnalysis() {
         SpectrumAnalysisSample[] analysis = new SpectrumAnalysisSample[windowsToCreate];
         int analysisIndex = 0;
@@ -78,7 +90,7 @@ public class SpectrumAnalyzer {
             LoudnessSample ls = null;
             for (int j = i; j < i + windowSize / 2; j++) {
                 double[] magnitudes = new double[channelData.length];
-                double freq = ((j - i) * 44100 / 2) / (windowSize / 2);
+                double freq = ((j - i) * sampleRate / 2) / (windowSize / 2);
                 for (int k = 0; k < channelData.length; k++) {
                     double magnitude = Math.sqrt(channelData[k][j] * 
                                                  channelData[k][j] + 

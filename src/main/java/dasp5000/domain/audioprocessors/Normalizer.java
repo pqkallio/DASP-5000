@@ -9,7 +9,7 @@ import dasp5000.utils.DecibelConverter;
  * 
  * @author Petri Kallio
  */
-public class NormalizerFromAbstract extends AudioProcessorAbstract {
+public class Normalizer extends AudioProcessor {
     private double dBFSMaxLevel;
     private double expansionMultiplier;
     
@@ -19,7 +19,7 @@ public class NormalizerFromAbstract extends AudioProcessorAbstract {
      * @param audioContainer The AudioContainer that contains the data to process.
      * @param dBFSMaxLevel The desired maximum level of audio in dBFS scale.
      */
-    public NormalizerFromAbstract(AudioContainer audioContainer, double dBFSMaxLevel) {
+    public Normalizer(AudioContainer audioContainer, double dBFSMaxLevel) {
         super(audioContainer);
         this.dBFSMaxLevel = dBFSMaxLevel;
         this.expansionMultiplier = calculateExpansionMultiplier();

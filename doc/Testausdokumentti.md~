@@ -1,3 +1,37 @@
 # Testausdokumentti
 
+## Testien toteutus
 
+Yksikkötestit ovat automatisoituja ja ne on toteutettu JUnitilla. Testit saadaan toistettua aina haluattaessa uudestaan ajamalla ne.
+
+## Testisyötteet
+
+Joka luokan kohdalla testataan poikkeusten toimivuus, syötteiden raja-arvot sekä palautusarvojen oikeellisuus.
+
+## Suorituskykytestit
+
+Testit on toteutettu antamalla algoritmeille syötteenä CD-äänenlaatua vastaavia tasasekunttimääriä ääninäytteitä, ts. kuvaajissa datan pituus sekunneissa vastaa 44100 ääninäytettä / sekunti. Näin ollen esimerkiksi datan pituuden ollessa kuvaajassa 10 sekuntia, on algoritmi käsitellyt 441000 näytettä.
+
+![Analyzer](pics/analyzer.png)
+
+Ajetut testit osoittavat, että algoritmi toimii O(n)-ajassa.
+
+![Gate](pics/gate.png)
+
+Ajetut testit osoittavat, että algoritmi toimii O(n)-ajassa.
+
+![Mixer](pics/mixer.png)
+
+Ajetut testit osoittavat, että algoritmi toimii O(n)-ajassa.
+
+![Normalizer](pics/normalizer.png)
+
+Ajetut testit osoittavat, että algoritmi toimii O(n)-ajassa.
+
+![Phase Switcher](pics/phaseSwitcher.png)
+
+Ajetut testit osoittavat, että algoritmi toimii O(n)-ajassa.
+
+![Reverser](pics/reverser.png)
+
+Ajetut testit osoittavat, että algoritmi toimii O(n)-ajassa.

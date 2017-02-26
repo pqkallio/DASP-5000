@@ -1,6 +1,7 @@
 
 package dasp5000.domain;
 
+import dasp5000.obsoletestuff.domain.LinkedList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

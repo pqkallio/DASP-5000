@@ -1,34 +1,47 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package dasp5000.domain.audioprocessors;
 
-import dasp5000.obsoletestuff.audioprocessors.Reverser;
-import dasp5000.controllers.AudioController;
+import dasp5000.domain.AudioAnalysis;
+import dasp5000.domain.AudioHeader;
+import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audiocontainers.AudioContainer;
-import java.io.IOException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author pqkallio
- */
 public class ReverserTest {
-    private AudioContainer ac;
-    private AudioContainer acControl;
+    AudioHeader ah1;
+    AudioHeader ah2;
+    int[] originalMonoSamples;
+    int[][] originalStereoSamples;
+    AudioContainer mono1;
+    AudioContainer stereo1;
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
     
     @Before
-    public void setUp() throws UnsupportedAudioFileException, IOException {
-        AudioController controller = new AudioController(ClassLoader.getSystemResource("test.wav").getPath());
-        AudioController controller2 = new AudioController(ClassLoader.getSystemResource("test.wav").getPath());
-        this.ac = controller.getAudioContainer();
-        this.acControl = controller2.getAudioContainer();
+    public void setUp() {
+        this.ah1 = new AudioHeader("test", 1, 44100, 3, 4, 16, 10);
+        this.ah2 = new AudioHeader("test", 2, 44100, 3, 4, 16, 10);
+        this.originalMonoSamples = new int[10];
+        this.originalStereoSamples = new int[2][10];
+        DynamicArray<Integer>[] monoChannel1 = createMonoData1();
+        DynamicArray<Integer>[] stereoChannel1 = createStereoData1();
+        this.mono1 = new AudioContainer(ah1);
+        this.mono1.setChannels(monoChannel1);
+        Analyzer.analyse(mono1);
+        this.stereo1 = new AudioContainer(ah2);
+        this.stereo1.setChannels(stereoChannel1);
+        Analyzer.analyse(stereo1);
     }
     
     @After
@@ -36,23 +49,65 @@ public class ReverserTest {
     }
     
     @Test
-    public void reversingWorks1() {
-        Reverser r = new Reverser(ac);
-        for (int i = 0; i < this.ac.getLeftChannel().size(); i++) {
-            assertEquals((int)ac.getLeftChannel().get(i), 
-                    (int)acControl.getLeftChannel().get(i));
+    public void phaseSwitchingMonoAudioWorks() {
+        for (int i = 0; i < 10; i++) {
+            assertEquals((int)mono1.getChannels()[0].get(i), originalMonoSamples[i]);
+        }
+        new Reverser(mono1).process();
+        int j = mono1.getSamplesPerChannel() - 1;
+        for (int i = 0; i < 10; i++) {
+            assertEquals((int)mono1.getChannels()[0].get(i), originalMonoSamples[j]);
+            j--;
         }
     }
     
     @Test
-    public void reversingWorks2() {
-        Reverser r = new Reverser(ac);
-        r.process();
-        int j = this.ac.getLeftChannel().size() - 1;
-        for (int i = 0; i < this.ac.getLeftChannel().size(); i++) {
-            assertEquals((int)ac.getLeftChannel().get(i), 
-                    (int)acControl.getLeftChannel().get(j));
+    public void phaseSwitchingStereoAudioWorks() {
+        for (int i = 0; i < 10; i++) {
+            assertEquals((int)stereo1.getChannels()[0].get(i), originalStereoSamples[0][i]);
+            assertEquals((int)stereo1.getChannels()[1].get(i), originalStereoSamples[1][i]);
+        }
+        new Reverser(stereo1).process();
+        int j = stereo1.getSamplesPerChannel() - 1;
+        for (int i = 0; i < 10; i++) {
+            assertEquals((int)stereo1.getChannels()[0].get(i), originalStereoSamples[0][j]);
+            assertEquals((int)stereo1.getChannels()[1].get(i), originalStereoSamples[1][j]);
             j--;
         }
+    }
+
+    private DynamicArray<Integer>[] createMonoData1() {
+        DynamicArray<Integer>[] channels = new DynamicArray[1];
+        channels[0] = new DynamicArray<>(Integer.class);
+        for (int i = 0; i < 10; i++) {
+            if (i % 2 == 0) {
+                channels[0].add(i * 100);
+                originalMonoSamples[i] = i * 100;
+            } else {
+                channels[0].add(-1 * i * 100);
+                originalMonoSamples[i] = -1 * i * 100;
+            }
+        }
+        return channels;
+    }
+
+    private DynamicArray<Integer>[] createStereoData1() {
+        DynamicArray<Integer>[] channels = new DynamicArray[2];
+        channels[0] = new DynamicArray<>(Integer.class);
+        channels[1] = new DynamicArray<>(Integer.class);
+        for (int i = 0; i < 10; i++) {
+            if (i % 2 == 0) {
+                channels[0].add(i * 100);
+                channels[1].add((int)Math.pow(2, i));
+                originalStereoSamples[0][i] = i * 100;
+                originalStereoSamples[1][i] = (int)Math.pow(2, i);
+            } else {
+                channels[0].add(-1 * i * 100);
+                channels[1].add(-1 * (int)Math.pow(2, i));
+                originalStereoSamples[0][i] = -1 * i * 100;
+                originalStereoSamples[1][i] = -1 * (int)Math.pow(2, i);
+            }
+        }
+        return channels;
     }
 }

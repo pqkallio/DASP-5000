@@ -3,7 +3,7 @@ package dasp5000.gui.listeners;
 
 import dasp5000.domain.DynamicArray;
 import dasp5000.domain.audioprocessors.Gate;
-import dasp5000.domain.audioprocessors.NormalizerFromAbstract;
+import dasp5000.domain.audioprocessors.Normalizer;
 import dasp5000.gui.AudioPanel;
 import dasp5000.gui.Notifiable;
 import dasp5000.utils.DecibelConverter;
@@ -43,7 +43,7 @@ public class NormalizerListener implements ActionListener {
                 if (result == JOptionPane.OK_OPTION) {
                     int max = (int)Math.pow(2, ap.getAudioController().getAudioContainer().getBitsPerAudioSample());
                     double levelSample = Double.parseDouble(levelField.getText());
-                    NormalizerFromAbstract norm = new NormalizerFromAbstract(ap.getAudioController().getAudioContainer(), levelSample);
+                    Normalizer norm = new Normalizer(ap.getAudioController().getAudioContainer(), levelSample);
                     norm.process();
                 }
             }

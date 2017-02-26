@@ -2,7 +2,8 @@
 package dasp5000.domain;
 
 /**
- *
+ * A class that performs a Fast Fourier transform on audio data.
+ * 
  * @author Petri Kallio
  */
 public class FFT {
@@ -12,6 +13,11 @@ public class FFT {
     private double[] sin;
     private double window[];
     
+    /**
+     * Constructor. The window size must be a power of two.
+     * 
+     * @param windowsize the window size
+     */
     public FFT(int windowsize) {
         this.windowsize = windowsize;
         this.m = (int)(Math.log(windowsize) / Math.log(2));
@@ -39,11 +45,27 @@ public class FFT {
         }
     }
 
+    /**
+     * Get the window size in use.
+     * 
+     * @return the window size
+     */
     public double[] getWindow() {
         return window;
     }
     
-    public void fft(double[] re, double[] im, int from) {
+    /**
+     * Run the fast Fourier transform on place to the given data. The data is 
+     * given in two arrays of doubles: realParts contains the real parts of the
+     * complex numbers to be processed and imaginaryParts contain the imaginary 
+     * parts. The transformation is made within the indices 
+     * [startIndex, ..., (startIndex + windowSize)].
+     * 
+     * @param realParts the real parts
+     * @param imaginaryParts the imaginary parts
+     * @param startIndex the start index of the transformation
+     */
+    public void transform(double[] realParts, double[] imaginaryParts, int startIndex) {
         int i, j, k, n1, n2, a;
         double c, s, t1, t2;
         
@@ -58,12 +80,12 @@ public class FFT {
             j = j + n1;
             
             if (i < j) {
-                t1 = re[i + from];
-                re[i + from] = re[j + from];
-                re[j + from] = t1;
-                t1 = im[i + from];
-                im[i + from] = im[j + from];
-                im[j + from] = t1;
+                t1 = realParts[i + startIndex];
+                realParts[i + startIndex] = realParts[j + startIndex];
+                realParts[j + startIndex] = t1;
+                t1 = imaginaryParts[i + startIndex];
+                imaginaryParts[i + startIndex] = imaginaryParts[j + startIndex];
+                imaginaryParts[j + startIndex] = t1;
             }
         }
         
@@ -81,12 +103,12 @@ public class FFT {
                 a += 1 << (m - i - 1);
                 
                 for (k = j; k < windowsize; k = k + n2) {
-                    t1 = c * re[k + n1 + from] - s * im[k + n1 + from];
-                    t2 = s * re[k + n1 + from] + c * im[k + n1 + from];
-                    re[k + n1 + from] = re[k + from] - t1;
-                    im[k + n1 + from] = im[k + from] - t2;
-                    re[k + from] = re[k + from] + t1;
-                    im[k + from] = im[k + from] + t2;
+                    t1 = c * realParts[k + n1 + startIndex] - s * imaginaryParts[k + n1 + startIndex];
+                    t2 = s * realParts[k + n1 + startIndex] + c * imaginaryParts[k + n1 + startIndex];
+                    realParts[k + n1 + startIndex] = realParts[k + startIndex] - t1;
+                    imaginaryParts[k + n1 + startIndex] = imaginaryParts[k + startIndex] - t2;
+                    realParts[k + startIndex] = realParts[k + startIndex] + t1;
+                    imaginaryParts[k + startIndex] = imaginaryParts[k + startIndex] + t2;
                 }
             }
         }

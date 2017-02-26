@@ -2,11 +2,20 @@
 package dasp5000.domain;
 
 /**
+ * A class to perform a Discrete Fourier Transform on data.
  *
- * @author pqkallio
+ * @author Petri Kallio
  */
 public class DFT {
     
+    /**
+     * Takes an array of samples between -1.0 and 1.0 and performs discrete 
+     * fourier transform on them. The returned array contains the frequency,
+     * its magnitude and its phase.
+     * 
+     * @param samples the samples to analyze
+     * @return the analysed data as an array
+     */
     public static double[][] transform(double[] samples) {
         int transformLength = 11025;
         double[][] analysis = new double[3][transformLength / 2];

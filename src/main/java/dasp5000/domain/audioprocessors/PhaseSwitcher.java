@@ -9,14 +9,14 @@ import dasp5000.domain.audiocontainers.AudioContainer;
  * 
  * @author Petri Kallio
  */
-public class PhaseSwitcherFromAbstract extends AudioProcessorAbstract {
+public class PhaseSwitcher extends AudioProcessor {
     
     /**
      * Creates a new PhaseSwitcher object.
      * 
      * @param audioContainer an AudioContainer object
      */
-    public PhaseSwitcherFromAbstract(AudioContainer audioContainer) {
+    public PhaseSwitcher(AudioContainer audioContainer) {
         super(audioContainer);
     }
     

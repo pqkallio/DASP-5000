@@ -2,18 +2,27 @@
 package dasp5000.domain;
 
 /**
+ * A single moment's samples' frequency and magnitude.
  *
  * @author Petri Kallio
  */
 public class LoudnessSample implements Comparable<LoudnessSample>{
-    private int startSample;
+    private int index;
     private int windowSize;
     private double frequency;
     private double[] magnitude;
 
-    public LoudnessSample(int sample, int windowSize, double frequency, 
+    /**
+     * Create a new loudness sample.
+     * 
+     * @param index the samples' index
+     * @param windowSize window size
+     * @param frequency the frequency
+     * @param data the magnitudes on every channel
+     */
+    public LoudnessSample(int index, int windowSize, double frequency, 
             double... data) {
-        this.startSample = sample;
+        this.index = index;
         this.windowSize = windowSize;
         this.frequency = frequency;
         this.magnitude = insertData(data);
@@ -27,17 +36,34 @@ public class LoudnessSample implements Comparable<LoudnessSample>{
         return mags;
     }
 
+    /**
+     * Get the frequency.
+     * 
+     * @return the frequency
+     */
     public double getFrequency() {
         return frequency;
     }
 
+    /**
+     * Get the magnitudes.
+     * 
+     * @return the magnitudes
+     */
     public double[] getMagnitude() {
         return magnitude;
     }
 
+    /**
+     * Compare the LoudnessSample with another. If the samples' indices are 
+     * equal, then the comparison is based on the samples' frequencies.
+     * 
+     * @param o
+     * @return integer
+     */
     @Override
     public int compareTo(LoudnessSample o) {
-        int dif = this.startSample - o.startSample;
+        int dif = this.index - o.index;
         if (dif != 0) {
             return dif;
         }
