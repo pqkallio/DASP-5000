@@ -10,7 +10,9 @@ Joka luokan kohdalla testataan poikkeusten toimivuus, syötteiden raja-arvot sek
 
 ## Suorituskykytestit
 
-Testit on toteutettu antamalla algoritmeille syötteenä CD-äänenlaatua vastaavia tasasekunttimääriä ääninäytteitä, ts. kuvaajissa datan pituus sekunneissa vastaa 44100 ääninäytettä / sekunti. Näin ollen esimerkiksi datan pituuden ollessa kuvaajassa 10 sekuntia, on algoritmi käsitellyt 441000 näytettä.
+Testit on toteutettu antamalla algoritmeille syötteenä CD-äänenlaatua vastaavia tasasekunttimääriä ääninäytteitä, ts. kuvaajissa datan pituus sekunneissa vastaa 44100 ääninäytettä / sekunti. Näin ollen esimerkiksi datan pituuden ollessa kuvaajassa 10 sekuntia, on algoritmi käsitellyt 441000 näytettä. Näin ollen kuvaajissa näkyvä pienin syöte on ollut 44100 näytettä ja suurin 882000 näytettä
+
+Testeissä jokaisen algoritmin kohdalla algoritmi on ajettu 1000 kertaa ja laskettu näistä keskiarvo.
 
 ![Analyzer](pics/analyzer.png)
 

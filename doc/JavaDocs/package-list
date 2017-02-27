@@ -1,0 +1,11 @@
+
+dasp5000
+dasp5000.controllers
+dasp5000.domain
+dasp5000.domain.audiocontainers
+dasp5000.domain.audioprocessors
+dasp5000.gui
+dasp5000.gui.listeners
+dasp5000.obsoletestuff.audioprocessors
+dasp5000.obsoletestuff.domain
+dasp5000.utils
