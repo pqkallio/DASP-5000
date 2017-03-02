@@ -53,11 +53,11 @@ public class Mixer extends AudioProcessor {
         return maxLength;
     }
     
-    private double sampleToDouble(int sample, int max) {
+    private static double sampleToDouble(int sample, int max) {
         return 1.0 * sample / max;
     }
 
-    private int doubleToSample(double mix, int maxSample) {
+    private static int doubleToSample(double mix, int maxSample) {
         return (int)(mix * maxSample);
     }
 
@@ -86,19 +86,8 @@ public class Mixer extends AudioProcessor {
     @Override
     protected void processSample(int sampleIndex, int channelIndex, int... samples) {
         if (channelIndex < mix.getChannels().length) {
-            double sample;
-            double newValue;
-            double mixValue = 0;
-            for (int i = 0; i < samples.length; i++) {
-                sample = sampleToDouble(samples[i], maxSample);
-                newValue = mixValue + sample;
-                if (newValue > 0) {
-                    mixValue = newValue - mixValue * sample;
-                } else {
-                    mixValue = newValue + mixValue * sample;
-                }
-            }
-            mix.getChannels()[channelIndex].add(doubleToSample(mixValue, maxSample));
+            int sample = mixSamples(samples, maxSample);
+            mix.getChannels()[channelIndex].add(sample);
         }
     }
 
@@ -110,5 +99,21 @@ public class Mixer extends AudioProcessor {
     @Override
     protected int samples() {
         return this.mixLength;
+    }
+    
+    public static int mixSamples(int samples[], int maxSample) {
+        double sample;
+        double newValue;
+        double mixValue = 0;
+        for (int i = 0; i < samples.length; i++) {
+            sample = sampleToDouble(samples[i], maxSample);
+            newValue = mixValue + sample;
+            if (newValue > 0) {
+                mixValue = newValue - mixValue * sample;
+            } else {
+                mixValue = newValue + mixValue * sample;
+            }
+        }
+        return doubleToSample(mixValue, maxSample);
     }
 }

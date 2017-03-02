@@ -3,6 +3,7 @@ package dasp5000.gui;
 
 import dasp5000.controllers.AudioController;
 import dasp5000.domain.DynamicArray;
+import dasp5000.gui.listeners.DelayListener;
 import dasp5000.gui.listeners.FileOpenerListener;
 import dasp5000.gui.listeners.FileSaveListener;
 import dasp5000.gui.listeners.GateListener;
@@ -14,7 +15,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.io.File;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -94,6 +94,7 @@ public class GraphicalUI implements Runnable, Notifiable {
         JMenu editMenu = new JMenu("Edit");
         JMenuItem openFile = new JMenuItem("Open");
         JMenuItem saveFile = new JMenuItem("Save");
+        JMenuItem delay = new JMenuItem("Delay");
         JMenuItem gate = new JMenuItem("Gate");
         JMenuItem reverser = new JMenuItem("Reverse");
         JMenuItem normalizer = new JMenuItem("Normalize");
@@ -101,6 +102,7 @@ public class GraphicalUI implements Runnable, Notifiable {
         JMenuItem mixer = new JMenuItem("Mix");
         openFile.addActionListener(new FileOpenerListener(this, this.audioPanels));
         saveFile.addActionListener(new FileSaveListener(this, audioPanels));
+        delay.addActionListener(new DelayListener(this, audioPanels));
         gate.addActionListener(new GateListener(this, audioPanels));
         reverser.addActionListener(new ReverserListener(this, audioPanels));
         normalizer.addActionListener(new NormalizerListener(this, audioPanels));
@@ -108,6 +110,7 @@ public class GraphicalUI implements Runnable, Notifiable {
         mixer.addActionListener(new MixerListener(this, audioPanels));
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
+        editMenu.add(delay);
         editMenu.add(gate);
         editMenu.add(mixer);
         editMenu.add(normalizer);
