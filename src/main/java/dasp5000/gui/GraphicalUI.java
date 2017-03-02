@@ -7,6 +7,7 @@ import dasp5000.gui.listeners.DelayListener;
 import dasp5000.gui.listeners.FileOpenerListener;
 import dasp5000.gui.listeners.FileSaveListener;
 import dasp5000.gui.listeners.GateListener;
+import dasp5000.gui.listeners.LoudnessAnalysisListener;
 import dasp5000.gui.listeners.MixerListener;
 import dasp5000.gui.listeners.NormalizerListener;
 import dasp5000.gui.listeners.PhaseSwitcherListener;
@@ -21,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 import javax.swing.WindowConstants;
 
 /**
@@ -100,6 +102,8 @@ public class GraphicalUI implements Runnable, Notifiable {
         JMenuItem normalizer = new JMenuItem("Normalize");
         JMenuItem phaseSwitch = new JMenuItem("Phase switch");
         JMenuItem mixer = new JMenuItem("Mix");
+        JSeparator separator = new JSeparator();
+        JMenuItem loudnessAnalysis = new JMenuItem("Loudness analysis");
         openFile.addActionListener(new FileOpenerListener(this, this.audioPanels));
         saveFile.addActionListener(new FileSaveListener(this, audioPanels));
         delay.addActionListener(new DelayListener(this, audioPanels));
@@ -108,6 +112,7 @@ public class GraphicalUI implements Runnable, Notifiable {
         normalizer.addActionListener(new NormalizerListener(this, audioPanels));
         phaseSwitch.addActionListener(new PhaseSwitcherListener(this, audioPanels));
         mixer.addActionListener(new MixerListener(this, audioPanels));
+        loudnessAnalysis.addActionListener(new LoudnessAnalysisListener(this, audioPanels));
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
         editMenu.add(delay);
@@ -116,6 +121,8 @@ public class GraphicalUI implements Runnable, Notifiable {
         editMenu.add(normalizer);
         editMenu.add(phaseSwitch);
         editMenu.add(reverser);
+        editMenu.add(separator);
+        editMenu.add(loudnessAnalysis);
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         return menuBar;

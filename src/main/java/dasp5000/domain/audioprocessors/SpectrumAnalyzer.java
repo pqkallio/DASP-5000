@@ -107,4 +107,12 @@ public class SpectrumAnalyzer {
         }
         return analysis;
     }
+
+    public int getSamplesPerChannel() {
+        return samplesPerChannel;
+    }
+
+    public AudioContainer getAudioContainer() {
+        return audioContainer;
+    }
 }
