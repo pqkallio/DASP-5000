@@ -6,6 +6,7 @@ import dasp5000.domain.FFT;
 import dasp5000.domain.LoudnessSample;
 import dasp5000.domain.SpectrumAnalysisSample;
 import dasp5000.domain.audiocontainers.AudioContainer;
+import dasp5000.utils.DecibelConverter;
 
 /**
  * A Spectrum analyzer.
@@ -83,6 +84,7 @@ public class SpectrumAnalyzer {
      * @return an array of SpectrumAnalysisSamples
      */
     public SpectrumAnalysisSample[] getAnalysis() {
+        double max = findMax();
         SpectrumAnalysisSample[] analysis = new SpectrumAnalysisSample[windowsToCreate];
         int analysisIndex = 0;
         for (int i = 0; i < channelData[0].length; i += windowSize) {
@@ -97,7 +99,7 @@ public class SpectrumAnalyzer {
                                                  imaginaryData[k][j] * 
                                                  imaginaryData[k][j]);
                     
-                    magnitudes[k] = magnitude;
+                    magnitudes[k] = DecibelConverter.fftMagnitudeToDecibels(magnitude, max);
                 }
                 ls = new LoudnessSample(i, windowSize, freq, magnitudes);
                 sas.addLoudnessSample(ls);
@@ -114,5 +116,24 @@ public class SpectrumAnalyzer {
 
     public AudioContainer getAudioContainer() {
         return audioContainer;
+    }
+
+    private double findMax() {
+        double max = 0;
+        for (int i = 0; i < channelData[0].length; i += windowSize) {
+            for (int j = i; j < i + windowSize / 2; j++) {
+                for (int k = 0; k < channelData.length; k++) {
+                    double magnitude = Math.sqrt(channelData[k][j] * 
+                                                 channelData[k][j] + 
+                                                 imaginaryData[k][j] * 
+                                                 imaginaryData[k][j]);
+                    
+                    if (magnitude > max) {
+                        max = magnitude;
+                    }
+                }
+            }
+        }
+        return max;
     }
 }

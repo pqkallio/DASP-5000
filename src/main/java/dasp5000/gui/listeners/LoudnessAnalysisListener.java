@@ -29,7 +29,9 @@ public class LoudnessAnalysisListener implements ActionListener {
             if (audioPanels.get(i).isSelected()) {
                 AudioContainer ac = audioPanels.get(i).getAudioController().getAudioContainer();
                 SpectrumAnalyzer analysis = new SpectrumAnalyzer(ac);
+                long start = System.currentTimeMillis();
                 analysis.process();
+                System.out.println("analysis complete at " + (System.currentTimeMillis() - start) + " ms");
                 new LoudnessAnalysis(analysis, audioPanels.get(i).getAudioController().getFileName());
             }
         }

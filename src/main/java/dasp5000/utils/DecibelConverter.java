@@ -9,6 +9,9 @@ package dasp5000.utils;
  */
 public class DecibelConverter {
     
+    public static double fftMagnitudeToDecibels(double sample, double maxValue) {
+        return 20 * Math.log10(sample / maxValue);
+    }
     /**
      * Returns the value of a given sample value as dBFS value.
      * 

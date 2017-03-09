@@ -1,11 +1,14 @@
 
 package dasp5000.gui;
 
+import dasp5000.domain.LoudnessSample;
+import dasp5000.domain.SpectrumAnalysisSample;
 import dasp5000.domain.audioprocessors.SpectrumAnalyzer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -37,26 +40,73 @@ public class LoudnessAnalysis {
         contentPane.setPreferredSize(new Dimension(1000, 500));
         JPanel analysis = createAnalysisPanel();
         JScrollPane scrollPane = new JScrollPane(analysis);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
         contentPane.add(scrollPane, BorderLayout.CENTER);
     }
 
     private JPanel createAnalysisPanel() {
+        int momentWidth = 10;
+        int heightDiv = 1;
+        int div = 5;
+        SpectrumAnalysisSample[] samples = analyzer.getAnalysis();
         JPanel analysisPanel = new JPanel();
         BufferedImage image = new BufferedImage(
-                500, 
-                1000, 
+                samples.length * momentWidth, 
+                samples[0].getSamples().length / heightDiv / div, 
                 BufferedImage.TYPE_INT_RGB);
         analysisPanel.setPreferredSize(
-                new Dimension(analyzer.getSamplesPerChannel(), 
-                        analyzer.getAnalysis()[0].getSamples().length));
-        
-        for (int i = 0; i < image.getWidth(); i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
-                image.getGraphics().setColor(Color.red);
-                image.getGraphics().drawImage(image, i, j, null);
+                new Dimension(samples.length * momentWidth, 
+                        samples[0].getSamples().length / heightDiv / div));
+        Graphics2D g = image.createGraphics();
+        int imageHeight = image.getHeight();
+        for (int i = 0; i < samples.length; i++) {
+            for (int j = 0; j < imageHeight; j++) {
+                int x = momentWidth * i;
+                int y = imageHeight - j;
+                double mag = getMean(samples[i], j * heightDiv, heightDiv);
+                int colorReduction;
+                if (mag < -96) {
+                    colorReduction = -255;
+                } else {
+                    colorReduction = (int)(mag * 2.65);
+                }
+                Color color = getColor(mag);
+                g.setColor(color);
+                g.drawLine(x, y, x + momentWidth, y);
             }
         }
         analysisPanel.add(new JLabel(new ImageIcon(image)));
         return analysisPanel;
+    }
+
+    private double getMean(SpectrumAnalysisSample sample, int start, int length) {
+        double sum = 0;
+        LoudnessSample[] samples = sample.getSamples();
+        for (int i = 0; i < length; i++) {
+            sum += samples[i + start].getMagnitude()[0];
+        }
+        return sum / length;
+    }
+    
+    private Color getColor(double magnitude) {
+        int red = 0;
+        int green = 0;
+        int blue = 0;
+        if (magnitude > -96) {
+            if (magnitude < -71) {
+                blue = Math.max(0, 255 + (int)((magnitude + 71) / 24 * 255));
+            } else if (magnitude < -47) {
+                blue = 255;
+                red = 255 + (int)((magnitude + 47) / 24 * 255);
+            } else if (magnitude < -23) {
+                red = 255;
+                blue = -1 * (int)((magnitude + 23) / 24 * 255);
+            } else {
+                red = 255;
+                green = 255 + (int)(magnitude / 24 * 255);
+            }
+        }
+        return new Color(red, green, blue);
     }
 }
