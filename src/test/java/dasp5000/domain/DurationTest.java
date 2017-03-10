@@ -120,4 +120,25 @@ public class DurationTest {
         assertEquals(d.getMinutes(), 1);
         assertEquals(d.getSeconds(), 15, 1);
     }
+    
+    @Test
+    public void setSamplesOk() {
+        Duration d = new Duration(44100, 44100);
+        d.setSamples(88200);
+        assertEquals(88200, d.getSamples());
+    }
+    
+    @Test
+    public void setSamplingFreqOk() {
+        Duration d = new Duration(44100, 44100);
+        d.setSamplingFrequency(88200);
+        assertEquals(88200, d.getSamplingFrequency());
+    }
+    
+    @Test
+    public void toStringOk() {
+        Duration d = new Duration(44100, 44100);
+        String res = "00:00:01,000";
+        assertEquals(res, d.toString());
+    }
 }

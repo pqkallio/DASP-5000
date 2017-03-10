@@ -2,20 +2,33 @@
 
 ## Ohjelman yleisrakenne
 
-Hierarkiakaavio toteutetaan myöhemmin, mutta tässä yleistä tietoa toteutetuista luokista:
+Toteutetut luokat:
 - AudioController-luokka, jolla hallitaan äänitiedoston avaamista, muokkausta ja tallentamista
 - AudioContainer-luokka, jossa säilötään tiedostosta parsittua äänidataa sekä hallinnollista tietoa (kanavien lukumäärä, audioanalyysi, bittisyys, näytteenottotaajuus etc.)
 - AudioAnalysis-luokka, johon säilötään audiodatasta analysoituja tietoja
 - ByteConverter-luokka, jolla muunnetaan audiotiedoston tavudataa muokattavaksi äänidataksi ja äänidataa jälleen tavuiksi
 - RiffParser-luokka, jolla muunnetaan RIFF WAVE -tiedosto AudioContainer-olioksi
 - RiffBuilder-luokka, jolla muunnetaan AudioContainer-olio RIFF WAVE -tiedostoksi
-- AudioProcessor abstrakti luokka, jonka kaikki ääntä muokkaavat luokat toteuttavat
+- AudioProcessor -abstrakti luokka, jonka kaikki ääntä muokkaavat luokat toteuttavat
 - DecibelConverter-luokka, jolla muunnetaan dBFS-arvoja (decibels relative to full scale) ääninäytteiksi ja ääninäytteitä dBFS-arvoiksi
 - DynamicArray-luokka on dynaaminen ja geneerinen taulukko
+- AudioHeader-tietorakenne audion metadatan tallentamiseen
+- Duration-luokka äänidatan näytteiden määrän kuvaamiseen aikana
+- FFT-luokka Fast Fourier Transformin suorittamiseksi
+- LoudnessSample-tietorakenne FFT:llä suoritetun äänisignaalin kanavien datan yhden ajanhetken tietyn taajuuden voimakkuuden tallentamiseen
+- Queue-tietorakenne (jonotietorakenne)
+- SpectrumAnalysisSample-tietorakenne, joka sisältää kaikkie FFT:llä suoritetun äänisignaalin LoudnessSamplet tietyltä ajanhetkeltä
+- WaveHeaderFields-enumeraattori wav-otsaketietojen parsimisen helpottamiseksi
+- Analyzer-luokka äänisignaali analysoimista varten (esim. maksimiäänenvoimakkuus)
+- Delay-luokka, äänenmuokkausalgoritmi
+- Gate-luokka, äänenmuokkausalgoritmi
+- Mixer-luokka, äänenmuokkausalgoritmi
+- Normalizer-luokka, äänenmuokkausalgoritmi
+- PhaseSwitcher-luokka, äänenmuokkausalgoritmi
+- Reverser-luokka, äänenmuokkausalgoritmi
+- SpectrumAnalyzer-luokka, analyysiluokka FFT:n suorittamiseksi äänitiedostolle
 
 ## Saavutetut aika- ja tilavaativuudet
-
-Pseudokoodi toteutetaan myöhemmin.
 
 | Algoritmi     | Aikavaativuus | Tilavaativuus |
 |---------------|---------------|---------------|
@@ -25,3 +38,9 @@ Pseudokoodi toteutetaan myöhemmin.
 | PhaseSwitcher | O(n)          | O(1)          |
 | Reverser      | O(n)          | O(1)          |
 | Gate          | O(n)          | O(1)          |
+| Delay         | O(n)          | O(n)          |
+| Queue - kaikki algoritmit | O(1) | O(n) |
+| DynamicArray - add | tasoitetusti O(1) | - |
+| DynamicArray - get | O(1) | - |
+| DynamicArray - replace | O(1) | - |
+

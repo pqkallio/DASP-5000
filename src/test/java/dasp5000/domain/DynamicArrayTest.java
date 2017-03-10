@@ -59,4 +59,17 @@ public class DynamicArrayTest {
         assertEquals(dynamicArray.size(), 1);
         dynamicArray.get(dynamicArray.size() + 1);
     }
+    
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void replacingToInvalidIndexCausesIndexOutOfBoundsException1() {
+        dynamicArray.replace(-1, 0);
+    }
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void replacingToInvalidIndexCausesIndexOutOfBoundsException2() {
+        dynamicArray.replace(0, 0);
+    }
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void replacingToInvalidIndexCausesIndexOutOfBoundsException3() {
+        dynamicArray.replace(1, 0);
+    }
 }

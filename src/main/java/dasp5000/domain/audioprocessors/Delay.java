@@ -18,6 +18,14 @@ public class Delay extends AudioProcessor {
     private final int[] buffer;
     private final int samplesPerChannel;
 
+    /**
+     * The constructor
+     * 
+     * @param audioContainer the AudioContainer to process
+     * @param decay the decay time in samples
+     * @param delay the delay time in samples
+     * @param times the times to repeat the samples
+     */
     public Delay(AudioContainer audioContainer, double decay, int delay, int times) {
         super(audioContainer);
         int numChannels = audioContainer.getNumberOfChannels();

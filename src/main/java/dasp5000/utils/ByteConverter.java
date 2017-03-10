@@ -33,10 +33,17 @@ public class ByteConverter {
         }
     }
     
+    /**
+     * Turn a integer value into an array of bytes
+     * 
+     * @param buffer the buffer to insert the bytes into
+     * @param value the value to transform
+     * @param bytesN the number of bytes to transform
+     * @param bigEndian true if big-endian, false otherwise
+     */
     public static void intToByteConversion(byte[] buffer, int value, int bytesN, 
             boolean bigEndian) {
         int max = 0xFFFFFFFF;
-        // this branch works incorrectly
         if (bigEndian) {
             for (int i = 0; i < bytesN; i++) {
                 buffer[i] = (byte)((value >> (8 * i)) & max);

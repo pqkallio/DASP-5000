@@ -8,10 +8,9 @@ package dasp5000.domain;
  */
 public class FFT {
     private int windowsize;
-    private int m;
-    private double[] cos;
-    private double[] sin;
-    private double window[];
+    private int powerOfTwoOfWindowSize;
+    private double[] cosValues;
+    private double[] sinValues;
     
     /**
      * Constructor. The window size must be a power of two.
@@ -20,28 +19,20 @@ public class FFT {
      */
     public FFT(int windowsize) {
         this.windowsize = windowsize;
-        this.m = (int)(Math.log(windowsize) / Math.log(2));
+        this.powerOfTwoOfWindowSize = (int)(Math.log(windowsize) / Math.log(2));
         
-        if (windowsize != (1 << m)) {
+        /* check that the windowsize is a power of two,
+           and if not, throw an IllegalArgumentException */
+        if (windowsize != (1 << powerOfTwoOfWindowSize)) {
             throw new IllegalArgumentException();
         }
         
-        this.cos = new double[windowsize / 2];
-        this.sin = new double[windowsize / 2];
+        this.cosValues = new double[windowsize / 2];
+        this.sinValues = new double[windowsize / 2];
         
         for (int i = 0; i < windowsize / 2; i++) {
-            cos[i] = Math.cos(-2 * Math.PI * i / windowsize);
-            sin[i] = Math.sin(-2 * Math.PI * i / windowsize);
-        }
-        
-        makeWindow();
-    }
-
-    private void makeWindow() {
-        this.window = new double[this.windowsize];
-        for (int i = 0; i < window.length; i++) {
-            window[i] = 0.42 - 0.5 * Math.cos(2 * Math.PI * i / (windowsize - 1)) 
-                    + 0.08 * Math.cos(4 * Math.PI * i / (windowsize - 1));
+            cosValues[i] = Math.cos(-2 * Math.PI * i / windowsize);
+            sinValues[i] = Math.sin(-2 * Math.PI * i / windowsize);
         }
     }
 
@@ -50,8 +41,8 @@ public class FFT {
      * 
      * @return the window size
      */
-    public double[] getWindow() {
-        return window;
+    public int getWindowSize() {
+        return windowsize;
     }
     
     /**
@@ -66,18 +57,19 @@ public class FFT {
      * @param startIndex the start index of the transformation
      */
     public void transform(double[] realParts, double[] imaginaryParts, int startIndex) {
-        int i, j, k, n1, n2, a;
-        double c, s, t1, t2;
+        int n1, n2;
+        double t1, t2;
         
-        j = 0;
+        int j = 0;
         n2 = windowsize / 2;
-        for (i = 1; i < windowsize - 1; i++) {
+        for (int i = 1; i < windowsize - 1; i++) {
             n1 = n2;
             while (j >= n1) {
-                j = j - n1;
-                n1 = n1 / 2;
+                j -= n1;
+                n1 /= 2;
             }
-            j = j + n1;
+            
+            j += n1;
             
             if (i < j) {
                 t1 = realParts[i + startIndex];
@@ -92,23 +84,29 @@ public class FFT {
         n1 = 0;
         n2 = 1;
         
-        for (i = 0; i < m; i++) {
+        for (int i = 0; i < powerOfTwoOfWindowSize; i++) {
             n1 = n2;
-            n2 = n2 + n2;
-            a = 0;
+            n2 *= 2;
+            int a = 0;
             
             for (j = 0; j < n1; j++) {
-                c = cos[a];
-                s = sin[a];
-                a += 1 << (m - i - 1);
+                double cosValue = cosValues[a];
+                double sinValue = sinValues[a];
+                a += 1 << (powerOfTwoOfWindowSize - i - 1);
                 
-                for (k = j; k < windowsize; k = k + n2) {
-                    t1 = c * realParts[k + n1 + startIndex] - s * imaginaryParts[k + n1 + startIndex];
-                    t2 = s * realParts[k + n1 + startIndex] + c * imaginaryParts[k + n1 + startIndex];
-                    realParts[k + n1 + startIndex] = realParts[k + startIndex] - t1;
-                    imaginaryParts[k + n1 + startIndex] = imaginaryParts[k + startIndex] - t2;
-                    realParts[k + startIndex] = realParts[k + startIndex] + t1;
-                    imaginaryParts[k + startIndex] = imaginaryParts[k + startIndex] + t2;
+                for (int k = j; k < windowsize; k = k + n2) {
+                    t1 = cosValue * realParts[k + n1 + startIndex] - 
+                            sinValue * imaginaryParts[k + n1 + startIndex];
+                    t2 = sinValue * realParts[k + n1 + startIndex] + 
+                            cosValue * imaginaryParts[k + n1 + startIndex];
+                    realParts[k + n1 + startIndex] = 
+                            realParts[k + startIndex] - t1;
+                    imaginaryParts[k + n1 + startIndex] = 
+                            imaginaryParts[k + startIndex] - t2;
+                    realParts[k + startIndex] = 
+                            realParts[k + startIndex] + t1;
+                    imaginaryParts[k + startIndex] = 
+                            imaginaryParts[k + startIndex] + t2;
                 }
             }
         }

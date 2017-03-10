@@ -15,10 +15,17 @@ public class AudioContainer {
     private DynamicArray<Integer>[] audioData;
     private AudioHeader audioHeader;
 
+    /**
+     * A constructor with no AudioHeader.
+     */
     public AudioContainer() {
         this(null);
     }
     
+    /**
+     * A constructor with AudioHeader
+     * @param header the AudioHeader object
+     */
     public AudioContainer(AudioHeader header) {
         if (header != null) {
             this.audioData = new DynamicArray[header.getNumberOfChannels()];

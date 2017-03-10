@@ -2,15 +2,15 @@
 
 ## Testien toteutus
 
-Yksikkötestit ovat automatisoituja ja ne on toteutettu JUnitilla. Testit saadaan toistettua aina haluattaessa uudestaan ajamalla ne.
+Yksikkötestit ovat automatisoituja ja ne on toteutettu JUnitilla. Testit saadaan toistettua aina haluattaessa uudestaan ajamalla ne. Testien kattavuutta on seurattu Pit-testeillä. Testien kattavuus koodista on 95% ja mutaatioiden kattavuus 71%. Mutaatioiden testaamista ei ole tässä vaiheessa painotettu, sillä tärkeämpää on ollut saada ohjelmassa oikeasti käytössä olevat syötteet testattua.
 
 ## Testisyötteet
 
-Joka luokan kohdalla testataan poikkeusten toimivuus, syötteiden raja-arvot sekä palautusarvojen oikeellisuus.
+Jokaisen luokan kohdalla on testattu poikkeustilanteiden toimivuus, syötteiden raja-arvot sekä palautusarvojen oikeellisuus.
 
 ## Suorituskykytestit
 
-Testit on toteutettu antamalla algoritmeille syötteenä CD-äänenlaatua vastaavia tasasekunttimääriä ääninäytteitä, ts. kuvaajissa datan pituus sekunneissa vastaa 44100 ääninäytettä / sekunti. Näin ollen esimerkiksi datan pituuden ollessa kuvaajassa 10 sekuntia, on algoritmi käsitellyt 441000 näytettä. Näin ollen kuvaajissa näkyvä pienin syöte on ollut 44100 näytettä ja suurin 882000 näytettä
+Testit on toteutettu antamalla algoritmeille syötteenä CD-äänenlaatua vastaavia tasasekunttimääriä ääninäytteitä, ts. kuvaajissa datan pituus sekunneissa vastaa 44100 ääninäytettä / sekunti. Näin ollen esimerkiksi datan pituuden ollessa kuvaajassa 10 sekuntia, on algoritmi käsitellyt 441000 näytettä. Näin ollen kuvaajissa näkyvä pienin syöte on ollut 44100 näytettä ja suurin 882000 näytettä.
 
 Testeissä jokaisen algoritmin kohdalla algoritmi on ajettu 1000 kertaa ja laskettu näistä keskiarvo.
 

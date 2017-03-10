@@ -37,12 +37,11 @@ public class SpectrumAnalyzer {
         this.sampleRate = audioContainer.getSampleRate();
         int maxSample = (int)Math.pow(2, this.audioContainer.getBitsPerAudioSample()) / 2;
         DynamicArray<Integer>[] channels = audioContainer.getChannels();
-        double windowsPerChannel = 1.0 * samplesPerChannel / this.windowSize;
         this.windowsToCreate = (int)(Math.ceil(1.0 * samplesPerChannel / this.windowSize));
         this.channelLength = windowsToCreate * windowSize;
         this.channelData = new double[numChannels][channelLength];
         this.imaginaryData = new double[numChannels][channelLength];
-        int i = 0;
+        int i;
         for (i = 0; i < channels[0].size(); i++) {
             for (int j = 0; j < numChannels; j++) {
                 channelData[j][i] = 1.0 * channels[j].get(i) / maxSample;
@@ -110,10 +109,20 @@ public class SpectrumAnalyzer {
         return analysis;
     }
 
+    /**
+     * Returns the amount of samples per channel
+     * 
+     * @return samples per channel
+     */
     public int getSamplesPerChannel() {
         return samplesPerChannel;
     }
 
+    /**
+     * Get the audio container
+     * 
+     * @return AudioContainer
+     */
     public AudioContainer getAudioContainer() {
         return audioContainer;
     }

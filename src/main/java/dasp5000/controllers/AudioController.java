@@ -1,10 +1,8 @@
 
 package dasp5000.controllers;
 
-import dasp5000.domain.AudioAnalysis;
 import dasp5000.domain.audiocontainers.AudioContainer;
 import dasp5000.domain.audioprocessors.Analyzer;
-import dasp5000.utils.DecibelConverter;
 import dasp5000.utils.RiffBuilder;
 import dasp5000.utils.RiffParser;
 import java.io.File;

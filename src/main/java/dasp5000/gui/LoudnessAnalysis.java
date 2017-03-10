@@ -46,9 +46,9 @@ public class LoudnessAnalysis {
     }
 
     private JPanel createAnalysisPanel() {
-        int momentWidth = 10;
-        int heightDiv = 1;
-        int div = 5;
+        int momentWidth = 50;
+        int heightDiv = 5;
+        int div = 1;
         SpectrumAnalysisSample[] samples = analyzer.getAnalysis();
         JPanel analysisPanel = new JPanel();
         BufferedImage image = new BufferedImage(
@@ -65,12 +65,6 @@ public class LoudnessAnalysis {
                 int x = momentWidth * i;
                 int y = imageHeight - j;
                 double mag = getMean(samples[i], j * heightDiv, heightDiv);
-                int colorReduction;
-                if (mag < -96) {
-                    colorReduction = -255;
-                } else {
-                    colorReduction = (int)(mag * 2.65);
-                }
                 Color color = getColor(mag);
                 g.setColor(color);
                 g.drawLine(x, y, x + momentWidth, y);

@@ -101,6 +101,13 @@ public class Mixer extends AudioProcessor {
         return this.mixLength;
     }
     
+    /**
+     * Get the mix sample of the given samples.
+     * 
+     * @param samples the samples to mix
+     * @param maxSample the maximum sample value
+     * @return the mixed sample
+     */
     public static int mixSamples(int samples[], int maxSample) {
         double sample;
         double newValue;
